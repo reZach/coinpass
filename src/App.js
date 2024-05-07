@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import geoJson from "./pins.json";
 
-mapboxgl.accessToken = "pk.eyJ1IjoicmVkZ29ibGluMjMiLCJhIjoiY2x2dnA3ODAyMXk2MDJpbzVzd2NtdDVsMiJ9.TBZRwebRR3T9E_4LiWjx8A";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function App() {
   const mapContainer = useRef(null);

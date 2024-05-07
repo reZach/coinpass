@@ -1,12 +1,9 @@
+require('dotenv').config();
+
 const supabase = require("@supabase/supabase-js");
 const fs = require("fs");
 
-//import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
-
-const client = supabase.createClient("https://jtpjludpfpwgxfbopkfs.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0cGpsdWRwZnB3Z3hmYm9wa2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwNDM1NzYsImV4cCI6MjAzMDYxOTU3Nn0.z-PLX2gbRLOnzAeyQOcw0NeLu33P7cIn8Os4QB6obtM");
+const client = supabase.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
 const b = async function blah() {
 
@@ -64,6 +61,7 @@ const b = async function blah() {
     }    
 
     fs.writeFileSync("./src/pins.json", JSON.stringify(ret));
+    console.log("success writing pins.json file");
 };
 
 b();
