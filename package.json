@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "update": "node ./update/supabase.js",
+    "updatepins": "node ./update/pins.js",
+    "updatecities": "node ./update/cities.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
