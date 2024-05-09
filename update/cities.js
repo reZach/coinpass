@@ -13,6 +13,7 @@ const f = async function RunMe() {
         .select("*")
 
     ret.cities = cities.map(c => ({
+        id: c.id,
         name: c.city,
         state: c.adminname,
         country: c.country,
@@ -20,8 +21,17 @@ const f = async function RunMe() {
         lng: c.lng
     }));
 
+    let countries = cities.map(c => c.country);
+    countries = Array.from(new Set(countries)); // only get unique values
+    countries.sort();
+
     fs.writeFileSync("./src/data/cities.json", JSON.stringify(ret));
     console.log("success writing cities.json file");
+
+    fs.writeFileSync("./src/data/countries.json", JSON.stringify({
+        countries: countries
+    }));
+    console.log("success writing countries.json file");
 };
 
 f();

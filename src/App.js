@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import Header from "./header";
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import geoJson from "./data/pins.json";
@@ -81,9 +82,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h2>text</h2>
-      </header>
+      <Header />
       <div>
         <div ref={mapContainer} className="map-container" />
       </div>
