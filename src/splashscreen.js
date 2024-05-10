@@ -8,7 +8,8 @@ function Splashscreen() {
         <div className="App">
             <Header />
             <div>
-                content
+                Do things for others
+                see how it inspires the world
             </div>
         </div>
     );

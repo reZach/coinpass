@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const supabase = require("@supabase/supabase-js");
 const fs = require("fs");
-const client = supabase.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const client = supabase.createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
 // This script queries Supabase and updates the local file of
 // the coins that is used on the webpage
