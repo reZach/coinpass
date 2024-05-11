@@ -112,11 +112,11 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Header />
+    <div className="App text-white">
+      <Header page={"coinpass"} />
       <div>
         <div ref={mapContainer} className="map-container" />
-        <div className="map-overlay top">
+        <div className="map-overlay top text-black">
           <div className="map-overlay-inner">
             <fieldset className="select-fieldset">
               <select id="lightPreset" name="lightPreset">

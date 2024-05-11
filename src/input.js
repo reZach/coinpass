@@ -97,7 +97,7 @@ function Input() {
 
     return (
         <div className="App">
-            <Header />
+            <Header page={"input"} />
             <form className="row g-3 needs-validation" onSubmit={submit}>
                 <div className="col-md-4">
                     <select onChange={changeCountry}>
