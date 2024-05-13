@@ -4,8 +4,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import geoCities from "./data/cities.json";
 import geoCountries from "./data/countries.json";
 
-
-
 const supabase = require("@supabase/supabase-js");
 const client = supabase.createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
@@ -13,9 +11,7 @@ function Input() {
 
     const [city, setCity] = useState([]);
     const [userCity, setUserCity] = useState(0);
-    const [code, setCode] = useState("");
-
-    //console.log(geoCountries);
+    const [code, setCode] = useState("");    
 
     let countries = [<option key={0} value={0}></option>];
     for (let i = 0; i < geoCountries.countries.length; i++) {
@@ -29,7 +25,6 @@ function Input() {
         }]
     };
 
-    let options = [];
     for (let i = 0; i < geoCities.cities.length; i++) {
         if (!privateMap.hasOwnProperty(geoCities.cities[i].country)) {
             privateMap[geoCities.cities[i].country] = [];
@@ -38,9 +33,7 @@ function Input() {
         privateMap[geoCities.cities[i].country].push({
             id: geoCities.cities[i].id,
             display: `${geoCities.cities[i].name}, ${geoCities.cities[i].state}`
-        });
-
-        //options.push(<option key={geoCities.cities[i].id} value={geoCities.cities[i].id}>{`${geoCities.cities[i].name}, ${geoCities.cities[i].country}`}</option>);
+        });        
     }
 
     let keys = Object.keys(privateMap);
@@ -48,21 +41,17 @@ function Input() {
         privateMap[keys[i]].sort((a, b) => {
             return a.display.localeCompare(b.display);
         });
-    }
-
-    //console.log(privateMap);
-
-    //console.log(options);
+    }    
 
     const submit = async (event) => {
         event.preventDefault();
-        
+
         let { data: coins, error } = await client
             .from('Coins')
             .select('*')
             .eq("identifier", code);
 
-        
+
         if (coins.length > 0) {
 
             // insert record
@@ -72,17 +61,12 @@ function Input() {
                     { coinid: coins[0].id, cityid: userCity },
                 ])
                 .select();
-
         }
-
     }
 
     const changeCountry = (event) => {
-        //console.log(city);
-
         let arr = ["", ...privateMap[event.target.value]];
         setCity(arr);
-        //console.log(city);
     }
 
     const changeCity = (event) => {
@@ -98,28 +82,51 @@ function Input() {
     return (
         <div className="App">
             <Header page={"input"} />
-            <form className="row g-3 needs-validation" onSubmit={submit}>
-                <div className="col-md-4">
-                    <select onChange={changeCountry}>
-                        {countries}
-                    </select>
+            <div className="container text-white">
+                <div className="row mb-4">
+                    <div className="col-3"></div>
+                    <div className="col-6">
+                        Enter in <em>where</em> you did something for others, starting with the country,
+                        and followed by the city. Don't forget to enter in the code on the coin!
+                    </div>
+                    <div className="col-3"></div>
+                </div>
+                <div className="row">
+                    <div className="col-3"></div>
+                    <div className="col-6">
+                        <form className="needs-validation" onSubmit={submit}>
+                            <div className="form-group row mb-2">
+                                <label for="inputEmail3" className="col-sm-2 col-form-label">Country</label>
+                                <div className="col-sm-10">
+                                    <select className="form-control" onChange={changeCountry} required>
+                                        {countries}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-group row mb-2">
+                                <label for="inputEmail3" className="col-sm-2 col-form-label">City</label>
+                                <div className="col-sm-10">
+                                    <select className="form-control" onChange={changeCity} disabled={city.length === 0} placeholder={(city.length === 0 ? "Disabled" : "")} required>
+                                        {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-group row mb-2">
+                                <label for="inputEmail3" className="col-sm-2 col-form-label">Code</label>
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control" placeholder="The code on your coin" value={code} onChange={changeCode} required />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <button className="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="col-3"></div>
                 </div>
 
-                <div className="col-md-4">
-                    <select onChange={changeCity}>
-                        {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
-                    </select>
-                </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="exampleInputPassword1">code</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="code" value={code} onChange={changeCode} />
-                </div>
-
-                <div className="col-12">
-                    <button className="btn btn-primary" type="submit">Submit form</button>
-                </div>
-            </form>
         </div>
     );
 }
