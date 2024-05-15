@@ -1,5 +1,4 @@
-function Header(props) {
-    console.log(props);
+function Header(props) {    
     return (
         <div className="container text-white">
             <header className="d-flex justify-content-center py-3">

@@ -46,9 +46,11 @@ body {
     Helvetica,
     sans-serif;
   position: absolute;
-  width: 200px;
-  top: 0;
+  width: 600px;
   left: 0;
+  right: 0;
+  bottom: 40px;
+  margin: 0 auto;
   padding: 10px;
 }
 
