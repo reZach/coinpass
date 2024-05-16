@@ -1,0 +1,39 @@
+.splash-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .copy-text {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .sub-header {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .cta-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: #0056b3;
+  }
