@@ -26,7 +26,7 @@ function Map() {
         if (markers.length > 0 && panningIndex >= 0) {
             let t = {
                 center: [markers[panningIndex]._lngLat.lng, markers[panningIndex]._lngLat.lat],
-                zoom: 10,
+                zoom: 15,
                 pitch: 0,
                 bearing: 0
             };
@@ -90,9 +90,10 @@ function Map() {
             let lineToDraw = [];
             let detailsToDraw = [];
             let offsets = [];
+            let m = []; // markers
 
             console.log(coords);
-            for (let i = 0; i < coords.length; i++) {
+            for (let i = 0; i < coords.length; i++) {                
 
                 detailsToDraw.push({
                     lng: coords[i].lng,
@@ -111,19 +112,21 @@ function Map() {
                             lat: coords[j].lat,
                             dte: coords[j].dte
                         });
+                    } else {
+                        break;
                     }
                 }
-                
+
                 let keys = Object.keys(offsets);
 
-                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`) === -1){
+                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`) === -1) {
                     offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`] = 0; // 0 = no offsets
                 } else {
                     offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`]++;
                 }
-                
 
-                
+
+
 
                 let html;
 
@@ -140,9 +143,10 @@ function Map() {
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
-                setMarkers(old => [...old, marker]);
+                m = [...m, marker];
+                //setMarkers(old => [...old, marker]);
 
-                lineToDraw.push([coords[i].lng, coords[i].lat]);
+                lineToDraw.push([coords[i].lng + offsetValue, coords[i].lat]);
 
                 if (detailsToDraw.length > 1) {
                     i += (detailsToDraw.length - 1); // we - 1 because i++ adds 1 in the for loop
@@ -150,6 +154,8 @@ function Map() {
 
                 detailsToDraw = [];
             }
+
+            setMarkers(m);
 
             let route = {
                 'type': 'FeatureCollection',
@@ -223,7 +229,7 @@ function Map() {
                         <div className="row">
                             <div className="col">
                                 <fieldset>
-                                    <label for="showPlaceLabels" style={{ alignSelf: "center" }}>Show</label>
+                                    <label for="showPlaceLabels" style={{ alignSelf: "center" }}>Coin</label>
                                     <select id="lightPreset" name="lightPreset" className="form-select" onChange={changeCoin}>
                                         {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
                                             return <option key={index} value={cn}>{cn}</option>
@@ -244,7 +250,7 @@ function Map() {
                                 <button className="btn" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
                             </div>
                             <div className="col">
-                                <button className="btn" onClick={next} disabled={panningIndex + 1 >= coords.length ? "disabled" : ""}>Next</button>
+                                <button className="btn" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
                             </div>
                         </div>
                     </div>
