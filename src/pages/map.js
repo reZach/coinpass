@@ -88,19 +88,67 @@ function Map() {
             // eventually do https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
 
             let lineToDraw = [];
+            let detailsToDraw = [];
+            let offsets = [];
 
+            console.log(coords);
             for (let i = 0; i < coords.length; i++) {
-                let html = `<strong>${selectedCoin}</strong><br />
-Person ${i + 1}: ${coords[i].dte}`;
+
+                detailsToDraw.push({
+                    lng: coords[i].lng,
+                    lat: coords[i].lat,
+                    dte: coords[i].dte
+                });
+
+                // check to see if subsequent coin passes are in the same city
+                for (let j = i + 1; j < coords.length; j++) {
+
+                    if (coords[j].lng === coords[i].lng &&
+                        coords[j].lat === coords[i].lat) {
+
+                        detailsToDraw.push({
+                            lng: coords[j].lng,
+                            lat: coords[j].lat,
+                            dte: coords[j].dte
+                        });
+                    }
+                }
+                
+                let keys = Object.keys(offsets);
+
+                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`) === -1){
+                    offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`] = 0; // 0 = no offsets
+                } else {
+                    offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`]++;
+                }
+                
+
+                
+
+                let html;
+
+                if (detailsToDraw.length === 1) {
+                    html = `Person ${i + 1}: ${coords[i].dte}`;
+                } else {
+                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coords[i].dte} - ${detailsToDraw[detailsToDraw.length - 1].dte}`;
+                }
+
+                let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`];
 
                 let marker = new mapboxgl.Marker()
-                    .setLngLat([coords[i].lng, coords[i].lat])
+                    .setLngLat([coords[i].lng + offsetValue, coords[i].lat])
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
                 setMarkers(old => [...old, marker]);
 
                 lineToDraw.push([coords[i].lng, coords[i].lat]);
+
+                if (detailsToDraw.length > 1) {
+                    i += (detailsToDraw.length - 1); // we - 1 because i++ adds 1 in the for loop
+                }
+
+                detailsToDraw = [];
             }
 
             let route = {
@@ -175,7 +223,7 @@ Person ${i + 1}: ${coords[i].dte}`;
                         <div className="row">
                             <div className="col">
                                 <fieldset>
-                                    <label for="showPlaceLabels" style={{alignSelf: "center"}}>Show</label>
+                                    <label for="showPlaceLabels" style={{ alignSelf: "center" }}>Show</label>
                                     <select id="lightPreset" name="lightPreset" className="form-select" onChange={changeCoin}>
                                         {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
                                             return <option key={index} value={cn}>{cn}</option>
@@ -183,7 +231,7 @@ Person ${i + 1}: ${coords[i].dte}`;
                                     </select>
                                 </fieldset>
                             </div>
-                            <div className="col" style={{alignSelf: "center"}}>
+                            <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label for="showPlaceLabels">Show</label>
                                     <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} />

@@ -25,7 +25,8 @@ const f = async function RunMe() {
                 .select("*")
 
                 // Filters
-                .eq('coinid', coinIds[i]);
+                .eq('coinid', coinIds[i])
+                .order("id", { ascending: true });
 
             if (!error2) {
                 
