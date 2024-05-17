@@ -17,14 +17,16 @@ function Action() {
     const initialized = useRef(false);
     const captchaValue = useRef(undefined);
 
-    useEffect(async () => {
-        if (!initialized.current) {
-            initialized.current = true;
+    useEffect(() => {
+        async function init() {
+            if (!initialized.current) {
+                initialized.current = true;
+            }
+
+            captchaValue.current = await generateCaptcha();
         }
-
-        captchaValue.current = await generateCaptcha();
+        init();
     }, []);
-
 
 
     let countries = [<option key={0} value={0}></option>];
@@ -119,7 +121,7 @@ function Action() {
                 title: "Good job!",
                 text: "Thanks for doing something good for another person!",
                 icon: "success"
-              });
+            });
         }
     }
 
@@ -142,7 +144,7 @@ function Action() {
 
     return (
         <div className="App">
-            <Header page={"input"} />
+            <Header page={"action"} />
             <div className="container text-white">
                 <div className="row mb-4">
                     <div className="col-3"></div>
@@ -157,7 +159,7 @@ function Action() {
                     <div className="col-6">
                         <form className="needs-validation" onSubmit={submit}>
                             <div className="form-group row mb-2">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Country</label>
+                                <label className="col-sm-2 col-form-label">Country</label>
                                 <div className="col-sm-10">
                                     <select className="form-control" onChange={changeCountry} required>
                                         {countries}
@@ -165,7 +167,7 @@ function Action() {
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">City</label>
+                                <label className="col-sm-2 col-form-label">City</label>
                                 <div className="col-sm-10">
                                     <select className="form-control" onChange={changeCity} value={userCity} disabled={city.length === 0} placeholder={(city.length === 0 ? "Disabled" : "")} required>
                                         {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
@@ -173,13 +175,13 @@ function Action() {
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Code</label>
+                                <label className="col-sm-2 col-form-label">Code</label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" placeholder="The code on your coin" value={code} onChange={changeCode} required />
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label for="inputEmail3" className="col-sm-2 col-form-label">Captcha</label>
+                                <label className="col-sm-2 col-form-label">Captcha</label>
                                 <div className="col-sm-10">
                                     <canvas id="js-canvas" className="text-white" width="300" height="100"></canvas>
                                     <input type="text" className="form-control" placeholder="Enter captcha value above" value={captcha} onChange={changeCaptcha} required />

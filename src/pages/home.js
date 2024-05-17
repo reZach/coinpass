@@ -11,7 +11,7 @@ function Home() {
     return (
         <div className="App text-white">
             <Header page={"start"}/>
-            <h1 className="display-1 bold">[working title]</h1>
+            <h1 className="display-1 bold">Good Samaritan Movement</h1>
             <h4 style={{marginBottom:"80px"}}>A project meant to inspire you by showing that even one small act of love<br /> can have a rippling effect across the world.</h4>
             <h1>How does it work?</h1>
             <p>

@@ -4,6 +4,7 @@ import './index.css';
 import Map from './pages/map';
 import Home from './pages/home';
 import Action from './pages/action';
+import Stats from "./pages/stats";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/action",
     element: <Action />
+  },
+  {
+    path: "/stats",
+    element: <Stats />
   }
 ]);
 

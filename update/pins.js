@@ -48,13 +48,19 @@ const f = async function RunMe() {
                             ret[identifier] = [{
                                 "lng": cities[0].lng,
                                 "lat": cities[0].lat,
-                                "dte": date.toDateString()
+                                "dte": date.toDateString(),
+                                "cty": cities[0].city,
+                                "adm": cities[0].adminname,
+                                "cou": cities[0].country
                             }];
                         } else {
                             ret[identifier].push({
                                 "lng": cities[0].lng,
                                 "lat": cities[0].lat,
-                                "dte": date.toDateString()
+                                "dte": date.toDateString(),
+                                "cty": cities[0].city,
+                                "adm": cities[0].adminname,
+                                "cou": cities[0].country
                             });
                         }                        
                     }

@@ -91,8 +91,7 @@ function Map() {
             let detailsToDraw = [];
             let offsets = [];
             let m = []; // markers
-
-            console.log(coords);
+            
             for (let i = 0; i < coords.length; i++) {                
 
                 detailsToDraw.push({
@@ -229,7 +228,7 @@ function Map() {
                         <div className="row">
                             <div className="col">
                                 <fieldset>
-                                    <label for="showPlaceLabels" style={{ alignSelf: "center" }}>Coin</label>
+                                    <label style={{ alignSelf: "center" }}>Coin</label>
                                     <select id="lightPreset" name="lightPreset" className="form-select" onChange={changeCoin}>
                                         {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
                                             return <option key={index} value={cn}>{cn}</option>
@@ -239,7 +238,7 @@ function Map() {
                             </div>
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
-                                    <label for="showPlaceLabels">Show</label>
+                                    <label>Show</label>
                                     <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} />
                                 </fieldset>
                             </div>
