@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/coinpass/static/css/main.0437eb73.css",
-    "main.js": "/coinpass/static/js/main.a53c4b86.js",
+    "main.js": "/coinpass/static/js/main.c8ed596c.js",
     "static/js/952.d23085ce.chunk.js": "/coinpass/static/js/952.d23085ce.chunk.js",
     "static/js/453.4a6e0443.chunk.js": "/coinpass/static/js/453.4a6e0443.chunk.js",
     "static/media/FS Sinclair Bold.otf": "/coinpass/static/media/FS Sinclair Bold.b79b832f3777cee9cccf.otf",
     "static/media/FS Sinclair Regular.otf": "/coinpass/static/media/FS Sinclair Regular.126d9abde377d71919c4.otf",
     "index.html": "/coinpass/index.html",
     "main.0437eb73.css.map": "/coinpass/static/css/main.0437eb73.css.map",
-    "main.a53c4b86.js.map": "/coinpass/static/js/main.a53c4b86.js.map",
+    "main.c8ed596c.js.map": "/coinpass/static/js/main.c8ed596c.js.map",
     "952.d23085ce.chunk.js.map": "/coinpass/static/js/952.d23085ce.chunk.js.map",
     "453.4a6e0443.chunk.js.map": "/coinpass/static/js/453.4a6e0443.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0437eb73.css",
-    "static/js/main.a53c4b86.js"
+    "static/js/main.c8ed596c.js"
   ]
 }
