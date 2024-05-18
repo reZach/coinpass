@@ -46,7 +46,7 @@ body {
     Helvetica,
     sans-serif;
   position: absolute;
-  width: 900px;
+  width: fit-content;
   left: 0;
   right: 0;
   bottom: 40px;

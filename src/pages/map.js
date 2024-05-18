@@ -36,13 +36,26 @@ function Map() {
                 essential: true
             });
         }
-    }, [panningIndex])
+    }, [panningIndex]);
+
+    const onlyShowActiveMarker = function(indexToShow){
+        for (let i = 0; i < markers.length; i++){
+            const p = markers[i].getPopup();
+            
+            if (i !== indexToShow && p.isOpen()){
+                markers[i].togglePopup();
+            } else if (i === indexToShow && !p.isOpen()) {
+                markers[i].togglePopup();
+            }            
+        }
+    }
 
     // Start the navigation for a coin at the very beginning
     const start = (event) => {
         event.preventDefault();
 
         setPanningIndex(0);
+        onlyShowActiveMarker(0);
     }
 
     // To navigate to the previous location a coin has been
@@ -51,6 +64,7 @@ function Map() {
 
         if (panningIndex > 0) {
             setPanningIndex(panningIndex - 1);
+            onlyShowActiveMarker(panningIndex - 1);
         }
     }
 
@@ -60,6 +74,7 @@ function Map() {
 
         if (panningIndex < coords.length) {
             setPanningIndex(panningIndex + 1);
+            onlyShowActiveMarker(panningIndex + 1);
         }
     }
 
@@ -91,8 +106,8 @@ function Map() {
             let detailsToDraw = [];
             let offsets = [];
             let m = []; // markers
-            
-            for (let i = 0; i < coords.length; i++) {                
+
+            for (let i = 0; i < coords.length; i++) {
 
                 detailsToDraw.push({
                     lng: coords[i].lng,
@@ -225,11 +240,11 @@ function Map() {
                 <div ref={mapContainer} className="map-container" />
                 <div className="map-overlay bottom text-black">
                     <div className="map-overlay-inner container">
-                        <div className="row">
+                        <div className="row d-none d-sm-flex">
                             <div className="col">
                                 <fieldset>
                                     <label style={{ alignSelf: "center" }}>Coin</label>
-                                    <select id="lightPreset" name="lightPreset" className="form-select" onChange={changeCoin}>
+                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
                                         {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
                                             return <option key={index} value={cn}>{cn}</option>
                                         })]}
@@ -243,13 +258,42 @@ function Map() {
                                 </fieldset>
                             </div>
                             <div className="col">
-                                <button className="btn" onClick={start}>Start</button>
+                                <button className="btn btn-primary" onClick={start}>Start</button>
                             </div>
                             <div className="col">
-                                <button className="btn" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
                             </div>
                             <div className="col">
-                                <button className="btn" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                            </div>
+                        </div>
+                        <div className="row mb-2 d-flex d-sm-none">
+                            <div className="col">
+                                <fieldset>
+                                    <label style={{ alignSelf: "center" }}>Coin</label>
+                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
+                                        {[<option key="-1" value="">-choose-</option>, coinNames.map((cn, index) => {
+                                            return <option key={index} value={cn}>{cn}</option>
+                                        })]}
+                                    </select>
+                                </fieldset>
+                            </div>
+                            <div className="col" style={{ alignSelf: "center" }}>
+                                <fieldset>
+                                    <label>Show</label>
+                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div className="row d-flex d-sm-none">
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
                             </div>
                         </div>
                     </div>

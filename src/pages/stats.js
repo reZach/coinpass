@@ -1,4 +1,4 @@
-
+import './stats.css';
 import Header from "./shared/header";
 import Spreadsheet from "react-spreadsheet";
 import React, { useRef, useEffect, useState } from 'react';
