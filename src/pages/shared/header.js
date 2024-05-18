@@ -4,7 +4,7 @@ function Header(props) {
             <header className="d-flex justify-content-center py-3">
                 <ul className="nav nav-pills">
                     <li className="nav-item"><a href="/start" className={"nav-link bold " + (props.page === "start" ? "active" : "")}>Home</a></li>
-                    <li className="nav-item"><a href="/coinpass" className={"nav-link bold " + (props.page === "coinpass" ? "active" : "")}>Map</a></li>
+                    <li className="nav-item"><a href="/map" className={"nav-link bold " + (props.page === "map" ? "active" : "")}>Map</a></li>
                     <li className="nav-item"><a href="/action" className={"nav-link bold " + (props.page === "action" ? "active" : "")}>Action</a></li>
                     <li className="nav-item"><a href="/stats" className={"nav-link bold " + (props.page === "stats" ? "active" : "")}>Stats</a></li>
                 </ul>

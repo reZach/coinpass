@@ -235,7 +235,7 @@ function Map() {
 
     return (
         <div className="App text-white">
-            <Header page={"coinpass"} />
+            <Header page={"map"} />
             <div>
                 <div ref={mapContainer} className="map-container" />
                 <div className="map-overlay bottom text-black">

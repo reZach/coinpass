@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <Home />
   },
   {
-    path: "/coinpass",
+    path: "/map",
     element: <Map />
   },
   {
