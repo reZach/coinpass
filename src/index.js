@@ -27,9 +27,10 @@ const router = createHashRouter([
   }
 ]);
 
+const basename = document.querySelector('base')?.getAttribute('href') ?? '/' 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <RouterProvider router={router} />
+  <RouterProvider router={router} basename={basename} />
 );
 
 // If you want to start measuring performance in your app, pass a function
