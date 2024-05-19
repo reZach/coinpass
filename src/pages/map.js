@@ -254,11 +254,11 @@ function Map() {
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label>Show</label>
-                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} />
+                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
                                 </fieldset>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={start}>Start</button>
+                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
                             </div>
                             <div className="col">
                                 <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
