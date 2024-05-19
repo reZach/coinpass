@@ -9,7 +9,7 @@ function Home() {
     }
 
     return (
-        <div className="App text-white">
+        <div className="App">
             <Header page={"start"} />
             <div className="container">
                 <h1 className="display-1 bold">Good Samaritan Movement</h1>
