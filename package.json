@@ -2,7 +2,7 @@
   "name": "coinpass",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
+  "homepage": ".",
   "dependencies": {
     "@supabase/supabase-js": "^2.43.1",
     "@testing-library/jest-dom": "^5.17.0",
