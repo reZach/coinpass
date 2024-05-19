@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/www.goodsamaritanmovement.com/static/css/main.944d8279.css",
-    "main.js": "/www.goodsamaritanmovement.com/static/js/main.9bdb87e8.js",
-    "static/js/952.d23085ce.chunk.js": "/www.goodsamaritanmovement.com/static/js/952.d23085ce.chunk.js",
-    "static/js/453.4a6e0443.chunk.js": "/www.goodsamaritanmovement.com/static/js/453.4a6e0443.chunk.js",
-    "static/media/FS Sinclair Bold.otf": "/www.goodsamaritanmovement.com/static/media/FS Sinclair Bold.b79b832f3777cee9cccf.otf",
-    "static/media/FS Sinclair Regular.otf": "/www.goodsamaritanmovement.com/static/media/FS Sinclair Regular.126d9abde377d71919c4.otf",
-    "index.html": "/www.goodsamaritanmovement.com/index.html",
-    "main.944d8279.css.map": "/www.goodsamaritanmovement.com/static/css/main.944d8279.css.map",
-    "main.9bdb87e8.js.map": "/www.goodsamaritanmovement.com/static/js/main.9bdb87e8.js.map",
-    "952.d23085ce.chunk.js.map": "/www.goodsamaritanmovement.com/static/js/952.d23085ce.chunk.js.map",
-    "453.4a6e0443.chunk.js.map": "/www.goodsamaritanmovement.com/static/js/453.4a6e0443.chunk.js.map"
+    "main.css": "/static/css/main.596f6e98.css",
+    "main.js": "/static/js/main.1fca4a95.js",
+    "static/js/952.d23085ce.chunk.js": "/static/js/952.d23085ce.chunk.js",
+    "static/js/453.4a6e0443.chunk.js": "/static/js/453.4a6e0443.chunk.js",
+    "static/media/FS Sinclair Bold.otf": "/static/media/FS Sinclair Bold.b79b832f3777cee9cccf.otf",
+    "static/media/FS Sinclair Regular.otf": "/static/media/FS Sinclair Regular.126d9abde377d71919c4.otf",
+    "index.html": "/index.html",
+    "main.596f6e98.css.map": "/static/css/main.596f6e98.css.map",
+    "main.1fca4a95.js.map": "/static/js/main.1fca4a95.js.map",
+    "952.d23085ce.chunk.js.map": "/static/js/952.d23085ce.chunk.js.map",
+    "453.4a6e0443.chunk.js.map": "/static/js/453.4a6e0443.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.944d8279.css",
-    "static/js/main.9bdb87e8.js"
+    "static/css/main.596f6e98.css",
+    "static/js/main.1fca4a95.js"
   ]
 }
