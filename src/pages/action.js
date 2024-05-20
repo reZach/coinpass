@@ -77,7 +77,7 @@ function Action() {
         await document.fonts.ready;
 
         const contex = document.getElementById("js-canvas").getContext("2d");
-        contex.fillStyle = "#ffffff";
+        contex.fillStyle = "#000000";
         contex.font = "32px \"FS Sinclair Bold\"";
         contex.fillText(ChangeCaptcha, 0, 50);
 
@@ -145,7 +145,7 @@ function Action() {
     return (
         <div className="App">
             <Header page={"action"} />
-            <div className="container text-white">
+            <div className="container">
                 <div className="row mb-4">
                     <div className="col-3"></div>
                     <div className="col-6">

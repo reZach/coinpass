@@ -1,5 +1,5 @@
-@font-face { font-family: "FS Sinclair Regular"; src: url("../public/fonts/FS Sinclair Regular.otf" )}
-@font-face { font-family: "FS Sinclair Bold"; src: url("../public/fonts/FS Sinclair Bold.otf" )}
+@font-face { font-family: "FS Sinclair Regular"; src: url("../public/fonts/Delius-Regular.ttf" )}
+@font-face { font-family: "FS Sinclair Bold"; src: url("../public/fonts/Delius-Regular.ttf" ); font-weight: bold;}
 
 .bold { font-family: "FS Sinclair Bold"; }
 
@@ -40,11 +40,11 @@ body {
 }
 
 .map-overlay {
-  font:
+  /* font:
     12px/20px 'Helvetica Neue',
     Arial,
     Helvetica,
-    sans-serif;
+    sans-serif; */
   position: absolute;
   width: fit-content;
   left: 0;
