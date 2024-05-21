@@ -71,6 +71,11 @@ const f = async function RunMe() {
 
     fs.writeFileSync("./src/data/pins.json", JSON.stringify(ret));
     console.log("success writing pins.json file");
+
+    fs.writeFileSync("./src/data/lastupdatetime.json", JSON.stringify({
+        time: (new Date()).getTime()
+    }));
+    console.log("success writing lastupdatetime.json file");
 };
 
 f();

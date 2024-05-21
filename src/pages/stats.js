@@ -10,7 +10,7 @@ function Stats() {
 
     const columns = [keys];
     const rows = [];
-    let data = [];    
+    let data = [];
 
     let depth = 0;
     let exit = false;
@@ -49,7 +49,11 @@ function Stats() {
     return <div className="App">
         <Header page={"stats"} />
 
-        <Spreadsheet data={data} columnLabels={columns} />
+        <div className="mt-4">
+            View the stats of the coins.<br /><br />
+            <em>Note: Please see the FAQ page regarding how soon submissions will be updated on the grid below.</em><br /><br />
+            <Spreadsheet data={data} columnLabels={columns} />
+        </div>
     </div >;
 }
 

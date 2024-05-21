@@ -1,16 +1,63 @@
-@font-face { font-family: "FS Sinclair Regular"; src: url("../public/fonts/Delius-Regular.ttf" )}
-@font-face { font-family: "FS Sinclair Bold"; src: url("../public/fonts/Delius-Regular.ttf" ); font-weight: bold;}
+@font-face {
+  font-family: "Lato-Regular";
+  src: url("../public/fonts/Lato-Regular.ttf")
+}
 
-.bold { font-family: "FS Sinclair Bold"; }
+@font-face {
+  font-family: "MedulaOne-Regular";
+  src: url("../public/fonts/MedulaOne-Regular.ttf")
+}
+
+/* https://mycolor.space/?hex=%23F7E7CE&sub=1 */
+:root {
+  --champagne: #f7e7ce;
+  --brown: #4e4637;
+  --darkbrown: #200505;
+  --clay: #b5aa99;
+  --seagreen: #b0d5ca;
+  --darkgreen: #7b9e94;
+}
+
+.bg-clay {
+  background-color: var(--clay);
+}
+
+.header {
+  font-family: "MedulaOne-Regular"
+}
+
+.copy  {
+  font-family: "Lato-Regular"
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Lato-Regular", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+    background-color: var(--champagne);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "FS Sinclair Regular"
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-bg: var(--brown)
+}
+
+.nav-pills:hover {
+  --bs-nav-pills-link-active-bg: var(--darkbrown);
+}
+
+.btn-primary {
+  background-color: var(--brown) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--darkbrown) !important;
+}
+
+.form-check-input {
+  border: 2px solid var(--darkbrown) !important;
 }
 
 code {

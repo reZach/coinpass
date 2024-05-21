@@ -13,6 +13,7 @@ function Action() {
     const [userCity, setUserCity] = useState(0);
     const [code, setCode] = useState("");
     const [captcha, setCaptcha] = useState("");
+    const [submitAnother, setSubmitAnother] = useState(false);
 
     const initialized = useRef(false);
     const captchaValue = useRef(undefined);
@@ -78,22 +79,40 @@ function Action() {
 
         const contex = document.getElementById("js-canvas").getContext("2d");
         contex.fillStyle = "#000000";
-        contex.font = "32px \"FS Sinclair Bold\"";
+        contex.font = "32px \"Lato-Regular\"";
         contex.fillText(ChangeCaptcha, 0, 50);
 
         return ChangeCaptcha;
     }
 
-
+    const refreshPage = (event) => {
+        window.location.reload(); // eslint-disable-line no-use-before-define
+    }
 
 
     const submit = async (event) => {
         event.preventDefault();
 
-        if (userCity !== "" &&
-            code !== "" &&
-            captcha !== captchaValue.current
-        ) {
+        if (userCity === 0) {
+            Swal.fire({
+                title: "Invalid",
+                text: "City not selected",
+                icon: "error"
+            });
+            return;
+        } else if (code === "") {
+            Swal.fire({
+                title: "Invalid",
+                text: "Coin value not found",
+                icon: "error"
+            });
+            return;
+        } else if (captcha !== captchaValue.current) {
+            Swal.fire({
+                title: "Invalid",
+                text: "Invalid captcha",
+                icon: "error"
+            });
             return;
         }
 
@@ -116,12 +135,25 @@ function Action() {
             setCode("");
             captchaValue.current = await generateCaptcha();
             setCaptcha("");
+            setSubmitAnother(true);
 
             Swal.fire({
                 title: "Good job!",
                 text: "Thanks for doing something good for another person!",
                 icon: "success"
             });
+        } else {
+
+            // prevent spamming the DB            
+            captchaValue.current = await generateCaptcha();
+            setCaptcha("");
+
+            Swal.fire({
+                title: "Invalid",
+                text: "We were unable to submit your details",
+                icon: "error"
+            });
+            return;
         }
     }
 
@@ -146,18 +178,20 @@ function Action() {
         <div className="App">
             <Header page={"action"} />
             <div className="container">
-                <div className="row mb-4">
-                    <div className="col-3"></div>
-                    <div className="col-6">
+                <div className="row mt-4 mb-4">
+                    <div className="col-2"></div>
+                    <div className="col-8">
                         Enter in <em>where</em> you did something for others, starting with the country,
-                        and followed by the city. Don't forget to enter in the code on the coin!
+                        and followed by the city. Don't forget to enter in the code on the coin!<br /><br />
+
+                        <em>Note: Please see the FAQ page regarding how soon submissions will be updated on the map.</em>
                     </div>
-                    <div className="col-3"></div>
+                    <div className="col-2"></div>
                 </div>
                 <div className="row">
-                    <div className="col-3"></div>
-                    <div className="col-6">
-                        <form className="needs-validation" onSubmit={submit}>
+                    <div className="col-2"></div>
+                    <div className="col-8">
+                        <form className="needs-validation mb-2" onSubmit={submit}>
                             <div className="form-group row mb-2">
                                 <label className="col-sm-2 col-form-label">Country</label>
                                 <div className="col-sm-10">
@@ -188,11 +222,14 @@ function Action() {
                                 </div>
                             </div>
                             <div className="row">
-                                <button className="btn btn-primary" type="submit">Submit</button>
+                                <button className="btn btn-primary" type="submit" disabled={submitAnother ? "disabled" : ""}>Submit</button>
                             </div>
                         </form>
+                        <div className="row mb-2" style={{display: submitAnother ? "flex" : "none"}}>
+                            <button className="btn btn-primary" type="button" onClick={refreshPage}>Click here to submit another</button>
+                        </div>
                     </div>
-                    <div className="col-3"></div>
+                    <div className="col-2"></div>
                 </div>
 
             </div>

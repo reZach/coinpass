@@ -38,15 +38,15 @@ function Map() {
         }
     }, [panningIndex]);
 
-    const onlyShowActiveMarker = function(indexToShow){
-        for (let i = 0; i < markers.length; i++){
+    const onlyShowActiveMarker = function (indexToShow) {
+        for (let i = 0; i < markers.length; i++) {
             const p = markers[i].getPopup();
-            
-            if (i !== indexToShow && p.isOpen()){
+
+            if (i !== indexToShow && p.isOpen()) {
                 markers[i].togglePopup();
             } else if (i === indexToShow && !p.isOpen()) {
                 markers[i].togglePopup();
-            }            
+            }
         }
     }
 
@@ -254,7 +254,7 @@ function Map() {
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label>Show</label>
-                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
+                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
                                 </fieldset>
                             </div>
                             <div className="col">
