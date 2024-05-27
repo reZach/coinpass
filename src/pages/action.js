@@ -1,5 +1,5 @@
 import Header from "./shared/header";
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import geoCities from "../data/cities.json";
 import geoCountries from "../data/countries.json";
@@ -65,11 +65,11 @@ function Action() {
             return;
         }
 
-        var chars = "2345679ACDEFGHJKLMNPQRSTUWXTZ";
+        var chars = "234679ACDEFGHJKLMNPQRTUVWXYZ";
         // You can include special characters by adding them to the string above, for eg: chars += "@#?<>";
 
         var string_length = 6; // This is the length of the Captcha    
-        var ChangeCaptcha = '';
+        var ChangeCaptcha = "";
         for (var i = 0; i < string_length; i++) {
             var rnum = Math.floor(Math.random() * chars.length);
             ChangeCaptcha += chars.substring(rnum, rnum + 1);
@@ -117,15 +117,15 @@ function Action() {
         }
 
         let { data: coins, error } = await client
-            .from('Coins')
-            .select('*')
-            .eq("identifier", code);
+            .from("Coins")
+            .select("*")
+            .eq("code", code);
 
         if (coins.length > 0) {
 
             // insert record
             const { data, error } = await client
-                .from('CoinCities')
+                .from("CoinCities")
                 .insert([
                     { coinid: coins[0].id, cityid: userCity },
                 ])
@@ -179,18 +179,18 @@ function Action() {
             <Header page={"action"} />
             <div className="container">
                 <div className="row mt-4 mb-4">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-sm-2"></div>
+                    <div className="col-sm-8 col-12">
                         Enter in <em>where</em> you did something for others, starting with the country,
                         and followed by the city. Don't forget to enter in the code on the coin!<br /><br />
 
                         <em>Note: Please see the FAQ page regarding how soon submissions will be updated on the map.</em>
                     </div>
-                    <div className="col-2"></div>
+                    <div className="col-sm-2"></div>
                 </div>
                 <div className="row">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-sm-2"></div>
+                    <div className="col-sm-8 col-12">
                         <form className="needs-validation mb-2" onSubmit={submit}>
                             <div className="form-group row mb-2">
                                 <label className="col-sm-2 col-form-label">Country</label>
@@ -229,7 +229,7 @@ function Action() {
                             <button className="btn btn-primary" type="button" onClick={refreshPage}>Click here to submit another</button>
                         </div>
                     </div>
-                    <div className="col-2"></div>
+                    <div className="col-sm-2"></div>
                 </div>
 
             </div>

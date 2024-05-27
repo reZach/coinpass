@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const supabase = require("@supabase/supabase-js");
 const fs = require("fs");
@@ -12,8 +12,8 @@ const f = async function RunMe() {
     let ret = {};
 
     let { data: coins, error1 } = await client
-        .from('Coins')
-        .select('*');
+        .from("Coins")
+        .select("*");
 
     if (!error1) {
 
@@ -21,11 +21,11 @@ const f = async function RunMe() {
         for (let i = 0; i < coinIds.length; i++) {
 
             let { data: coinCities, error2 } = await client
-                .from('CoinCities')
+                .from("CoinCities")
                 .select("*")
 
                 // Filters
-                .eq('coinid', coinIds[i])
+                .eq("coinid", coinIds[i])
                 .order("id", { ascending: true });
 
             if (!error2) {
@@ -33,34 +33,34 @@ const f = async function RunMe() {
                 for (let j = 0; j < coinCities.length; j++) {
 
                     let { data: cities, error3 } = await client
-                        .from('Cities')
+                        .from("Cities")
                         .select("*")
 
                         // Filters
-                        .eq('id', coinCities[j].cityid);
+                        .eq("id", coinCities[j].cityid);
 
                     if (!error3){
-
-                        let date = new Date(coinCities[j].date);
-                        let identifier = coins.filter(c => c.id === coinIds[i])[0].identifier;
+                        
+                        let date = new Date(coinCities[j].created_at);
+                        let displayValue = coins.filter(c => c.id === coinIds[i])[0].display_value;
                         
                         if (j === 0){
-                            ret[identifier] = [{
-                                "lng": cities[0].lng,
-                                "lat": cities[0].lat,
-                                "dte": date.toDateString(),
-                                "cty": cities[0].city,
-                                "adm": cities[0].adminname,
-                                "cou": cities[0].country
+                            ret[displayValue] = [{
+                                "longitude": cities[0].lng,
+                                "latitude": cities[0].lat,
+                                "date": date.toDateString(),
+                                "city": cities[0].cityascii,
+                                "state": cities[0].adminname,
+                                "country": cities[0].country
                             }];
                         } else {
-                            ret[identifier].push({
-                                "lng": cities[0].lng,
-                                "lat": cities[0].lat,
-                                "dte": date.toDateString(),
-                                "cty": cities[0].city,
-                                "adm": cities[0].adminname,
-                                "cou": cities[0].country
+                            ret[displayValue].push({
+                                "longitude": cities[0].lng,
+                                "latitude": cities[0].lat,
+                                "date": date.toDateString(),
+                                "city": cities[0].cityascii,
+                                "state": cities[0].adminname,
+                                "country": cities[0].country
                             });
                         }                        
                     }

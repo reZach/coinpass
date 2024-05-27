@@ -9,8 +9,8 @@ function Faq() {
             <Header page={"faq"} />
             <div className="container">
                 <div className="row mt-4">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-sm-2"></div>
+                    <div className="col-sm-8 col-12">
                         <h1 className="display-3 header">I can't see pins on the map</h1>
                         <p>First, choose a coin from the dropdown, then select the "Show" checkbox. You can then navigate by clicking on the buttons or panning the map.</p>
 
@@ -34,7 +34,7 @@ function Faq() {
                         </p>
                         <p style={{marginTop: "80px"}}><em>Data last updated on {new Date(updateTime.time).toLocaleDateString()}</em></p>
                     </div>
-                    <div className="col-2"></div>
+                    <div className="col-sm-2"></div>
                 </div>
             </div>
         </div>

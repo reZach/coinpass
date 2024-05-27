@@ -1,17 +1,17 @@
-import './map.css';
+import "./map.css";
 import Header from "./shared/header";
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import geoJson from "../data/pins.json";
+import React, { useRef, useEffect, useState } from "react";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import pinsData from "../data/pins.json";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function Map() {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(9);
+    const [lng, setLng] = useState(-92.47);
+    const [lat, setLat] = useState(38.25);
+    const [zoom, setZoom] = useState(3);
     const [coinNames, setCoinNames] = useState([]);
     const [selectedCoin, setSelectedCoin] = useState("");
     const [markers, setMarkers] = useState([]);
@@ -92,7 +92,7 @@ function Map() {
             setCoords([]);
         } else {
             setSelectedCoin(newCoin);
-            setCoords(geoJson[newCoin]);
+            setCoords(pinsData[newCoin]);
         }
     }
 
@@ -110,21 +110,21 @@ function Map() {
             for (let i = 0; i < coords.length; i++) {
 
                 detailsToDraw.push({
-                    lng: coords[i].lng,
-                    lat: coords[i].lat,
-                    dte: coords[i].dte
+                    longitude: coords[i].longitude,
+                    latitude: coords[i].latitude,
+                    date: coords[i].date
                 });
 
                 // check to see if subsequent coin passes are in the same city
                 for (let j = i + 1; j < coords.length; j++) {
 
-                    if (coords[j].lng === coords[i].lng &&
-                        coords[j].lat === coords[i].lat) {
+                    if (coords[j].longitude === coords[i].longitude &&
+                        coords[j].latitude === coords[i].latitude) {
 
                         detailsToDraw.push({
-                            lng: coords[j].lng,
-                            lat: coords[j].lat,
-                            dte: coords[j].dte
+                            longitude: coords[j].longitude,
+                            latitude: coords[j].latitude,
+                            date: coords[j].date
                         });
                     } else {
                         break;
@@ -133,10 +133,10 @@ function Map() {
 
                 let keys = Object.keys(offsets);
 
-                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`) === -1) {
-                    offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`] = 0; // 0 = no offsets
+                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`) === -1) {
+                    offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`] = 0; // 0 = no offsets
                 } else {
-                    offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`]++;
+                    offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`]++;
                 }
 
 
@@ -145,22 +145,22 @@ function Map() {
                 let html;
 
                 if (detailsToDraw.length === 1) {
-                    html = `Person ${i + 1}: ${coords[i].dte}`;
+                    html = `Person ${i + 1}: ${coords[i].date}`;
                 } else {
-                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coords[i].dte} - ${detailsToDraw[detailsToDraw.length - 1].dte}`;
+                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coords[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
                 }
 
-                let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].lng}|${detailsToDraw[detailsToDraw.length - 1].lat}`];
+                let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
 
                 let marker = new mapboxgl.Marker()
-                    .setLngLat([coords[i].lng + offsetValue, coords[i].lat])
+                    .setLngLat([coords[i].longitude + offsetValue, coords[i].latitude])
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
                 m = [...m, marker];
                 //setMarkers(old => [...old, marker]);
 
-                lineToDraw.push([coords[i].lng + offsetValue, coords[i].lat]);
+                lineToDraw.push([coords[i].longitude + offsetValue, coords[i].latitude]);
 
                 if (detailsToDraw.length > 1) {
                     i += (detailsToDraw.length - 1); // we - 1 because i++ adds 1 in the for loop
@@ -170,32 +170,33 @@ function Map() {
             }
 
             setMarkers(m);
+            console.log(lineToDraw);
 
             let route = {
-                'type': 'FeatureCollection',
-                'features': [
+                "type": "FeatureCollection",
+                "features": [
                     {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': lineToDraw
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": lineToDraw
                         }
                     }
                 ]
             };
 
-            map.current.addSource('route', {
-                'type': 'geojson',
-                'data': route
+            map.current.addSource("route", {
+                "type": "geojson",
+                "data": route
             });
 
             map.current.addLayer({
-                'id': 'route',
-                'source': 'route',
-                'type': 'line',
-                'paint': {
-                    'line-width': 2,
-                    'line-color': '#007cbf'
+                "id": "route",
+                "source": "route",
+                "type": "line",
+                "paint": {
+                    "line-width": 2,
+                    "line-color": "#007cbf"
                 }
             });
         } else {
@@ -222,7 +223,7 @@ function Map() {
 
         // Pull names of coins from our data file
         map.current.on("load", () => {
-            const coins = Object.keys(geoJson).sort();
+            const coins = Object.keys(pinsData).sort();
 
             setCoinNames(coins);
         });

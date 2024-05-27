@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import Map from './pages/map';
-import Home from './pages/home';
-import Action from './pages/action';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import Map from "./pages/map";
+import Home from "./pages/home";
+import Action from "./pages/action";
 import Stats from "./pages/stats";
 import Faq from "./pages/faq";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from "./reportWebVitals";
 
 const router = createHashRouter([
   {
@@ -32,8 +32,8 @@ const router = createHashRouter([
   }
 ]);
 
-const basename = document.querySelector('base')?.getAttribute('href') ?? '/' 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const basename = document.querySelector("base")?.getAttribute("href") ?? "/" 
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <RouterProvider router={router} basename={basename} />
 );

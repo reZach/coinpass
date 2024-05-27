@@ -24,8 +24,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "updatepins": "node ./update/pins.js",
-    "updatecities": "node ./update/cities.js",
+    "updateall": "npm run updatepins && npm run updatecities",
+    "updatepins": "node ./commands/pins.js",
+    "updatecities": "node ./commands/cities.js",
+    "newcodes": "node ./commands/codes.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
