@@ -237,65 +237,63 @@ function Map() {
     return (
         <div className="App text-white">
             <Header page={"map"} />
-            <div>
-                <div ref={mapContainer} className="map-container" />
-                <div className="map-overlay bottom text-black">
-                    <div className="map-overlay-inner container">
-                        <div className="row d-none d-sm-flex">
-                            <div className="col">
-                                <fieldset>
-                                    <label style={{ alignSelf: "center" }}>Coin</label>
-                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
-                                        {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
-                                            return <option key={index} value={cn}>{cn}</option>
-                                        })]}
-                                    </select>
-                                </fieldset>
-                            </div>
-                            <div className="col" style={{ alignSelf: "center" }}>
-                                <fieldset>
-                                    <label>Show</label>
-                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
-                                </fieldset>
-                            </div>
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
-                            </div>
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
-                            </div>
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
-                            </div>
+            <div ref={mapContainer} className="map-container" />
+            <div className="map-overlay bottom text-black">
+                <div className="map-overlay-inner container">
+                    <div className="row d-none d-sm-flex">
+                        <div className="col">
+                            <fieldset>
+                                <label style={{ alignSelf: "center" }}>Coin</label>
+                                <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
+                                    {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
+                                        return <option key={index} value={cn}>{cn}</option>
+                                    })]}
+                                </select>
+                            </fieldset>
                         </div>
-                        <div className="row mb-2 d-flex d-sm-none">
-                            <div className="col">
-                                <fieldset>
-                                    <label style={{ alignSelf: "center" }}>Coin</label>
-                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
-                                        {[<option key="-1" value="">-choose-</option>, coinNames.map((cn, index) => {
-                                            return <option key={index} value={cn}>{cn}</option>
-                                        })]}
-                                    </select>
-                                </fieldset>
-                            </div>
-                            <div className="col" style={{ alignSelf: "center" }}>
-                                <fieldset>
-                                    <label>Show</label>
-                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
-                                </fieldset>
-                            </div>
+                        <div className="col" style={{ alignSelf: "center" }}>
+                            <fieldset>
+                                <label>Show</label>
+                                <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
+                            </fieldset>
                         </div>
-                        <div className="row d-flex d-sm-none">
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
-                            </div>
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
-                            </div>
-                            <div className="col">
-                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
-                            </div>
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
+                        </div>
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                        </div>
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                        </div>
+                    </div>
+                    <div className="row mb-2 d-flex d-sm-none">
+                        <div className="col">
+                            <fieldset>
+                                <label style={{ alignSelf: "center" }}>Coin</label>
+                                <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
+                                    {[<option key="-1" value="">-choose-</option>, coinNames.map((cn, index) => {
+                                        return <option key={index} value={cn}>{cn}</option>
+                                    })]}
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div className="col" style={{ alignSelf: "center" }}>
+                            <fieldset>
+                                <label>Show</label>
+                                <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div className="row d-flex d-sm-none">
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
+                        </div>
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                        </div>
+                        <div className="col">
+                            <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
                         </div>
                     </div>
                 </div>

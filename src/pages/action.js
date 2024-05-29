@@ -29,10 +29,16 @@ function Action() {
         init();
     }, []);
 
-
+    // todo - prioritize country based on ip
+    let usaIndex = geoCountries.countries.indexOf("United States");
+    
     let countries = [<option key={0} value={0}></option>];
+    countries.push(<option key={geoCountries.countries[usaIndex]} value={geoCountries.countries[usaIndex]}>{geoCountries.countries[usaIndex]}</option>);
     for (let i = 0; i < geoCountries.countries.length; i++) {
-        countries.push(<option key={geoCountries.countries[i]} value={geoCountries.countries[i]}>{geoCountries.countries[i]}</option>);
+
+        if (i !== usaIndex) {
+            countries.push(<option key={geoCountries.countries[i]} value={geoCountries.countries[i]}>{geoCountries.countries[i]}</option>);
+        }
     }
 
     let privateMap = {
@@ -225,7 +231,7 @@ function Action() {
                                 <button className="btn btn-primary" type="submit" disabled={submitAnother ? "disabled" : ""}>Submit</button>
                             </div>
                         </form>
-                        <div className="row mb-2" style={{display: submitAnother ? "flex" : "none"}}>
+                        <div className="row mb-2" style={{ display: submitAnother ? "flex" : "none" }}>
                             <button className="btn btn-primary" type="button" onClick={refreshPage}>Click here to submit another</button>
                         </div>
                     </div>
