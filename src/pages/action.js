@@ -10,6 +10,7 @@ const client = supabase.createClient(process.env.REACT_APP_SUPABASE_URL, process
 function Action() {
 
     const [city, setCity] = useState([]);
+    const [userStateProvince, setStateProvince] = useState(0);
     const [userCity, setUserCity] = useState(0);
     const [code, setCode] = useState("");
     const [captcha, setCaptcha] = useState("");
@@ -168,6 +169,10 @@ function Action() {
         setCity(arr);
     }
 
+    const changeStateProvince = (event) => {
+        setUserCity(event.target.value);
+    }
+
     const changeCity = (event) => {
         setUserCity(event.target.value);
     }
@@ -203,6 +208,14 @@ function Action() {
                                 <div className="col-sm-10">
                                     <select className="form-control" onChange={changeCountry} required>
                                         {countries}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-group row mb-2">
+                                <label className="col-sm-2 col-form-label">State/Province</label>
+                                <div className="col-sm-10">
+                                    <select className="form-control" onChange={changeStateProvince} value={userCity} disabled={city.length === 0} placeholder={(city.length === 0 ? "Disabled" : "")} required>
+                                        {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
                                     </select>
                                 </div>
                             </div>
