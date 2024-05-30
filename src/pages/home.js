@@ -26,6 +26,7 @@ function Home() {
                     <div className="cta-buttons">
                         <button className="cta-button" onClick={() => navigate("/#action")}>Log your action</button>
                         <button className="cta-button" onClick={() => navigate("/#map")}>View the map</button>
+                        <button className="cta-button" onClick={() => navigate("/#faq")}>View FAQ</button>
                     </div>
                 </div>
 

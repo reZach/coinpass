@@ -5,7 +5,7 @@ import React, { useRef, useEffect, useState } from "react";
 import geoJson from "../data/pins.json";
 
 function Stats() {
-    
+
     const keys = Object.keys(geoJson).sort();
 
     const columns = [keys];
@@ -50,8 +50,9 @@ function Stats() {
         <Header page={"stats"} />
 
         <div className="mt-4">
+            <h1 className="display-1 header">Statistics</h1>
             View the stats of the coins.<br /><br />
-            <em>Note: Please see the FAQ page regarding how soon submissions will be updated on the grid below.</em><br /><br />
+            <em>Note: Please see the <a href="#/faq">FAQ page</a> regarding how soon submissions will be updated on the grid below.</em><br /><br />
 
             {Object.keys(data).length > 0 ?
                 <Spreadsheet data={data} columnLabels={columns} />

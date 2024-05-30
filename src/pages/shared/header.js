@@ -18,6 +18,9 @@ function Header(props) {
                             <a href="/#action" className={"nav-link bold " + (props.page === "action" ? "active" : "")}>Action</a>
                         </li>
                         <li className="nav-item">
+                            <a href="/#addcity" className={"nav-link bold " + (props.page === "addcity" ? "active" : "")}>Add city</a>
+                        </li>
+                        <li className="nav-item">
                             <a href="/#stats" className={"nav-link bold " + (props.page === "stats" ? "active" : "")}>Stats</a>
                         </li>
                         <li className="nav-item">

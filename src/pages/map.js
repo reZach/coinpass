@@ -150,6 +150,8 @@ function Map() {
                     html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coords[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
                 }
 
+                html += `<br />${coords[i].city}, ${coords[i].state}`;
+
                 let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
 
                 let marker = new mapboxgl.Marker()
@@ -157,20 +159,20 @@ function Map() {
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
-                m = [...m, marker];
-                //setMarkers(old => [...old, marker]);
+                m = [...m, marker];                
 
                 lineToDraw.push([coords[i].longitude + offsetValue, coords[i].latitude]);
 
+                // We adjust i to account for if we are grouping multiple
+                // "passes" in a single pin on the map. 
                 if (detailsToDraw.length > 1) {
-                    i += (detailsToDraw.length - 1); // we - 1 because i++ adds 1 in the for loop
+                    i += (detailsToDraw.length - 1); // We subtract 1 so i lands on the proper next element to process in the array
                 }
 
                 detailsToDraw = [];
             }
 
-            setMarkers(m);
-            console.log(lineToDraw);
+            setMarkers(m);            
 
             let route = {
                 "type": "FeatureCollection",

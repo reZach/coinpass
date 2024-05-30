@@ -214,7 +214,7 @@ function Action() {
     }
 
     const changeCaptcha = (event) => {
-        setCaptcha(event.target.value);
+        setCaptcha(event.target.value.toUpperCase());
     }
 
     return (
@@ -224,10 +224,10 @@ function Action() {
                 <div className="row mt-4 mb-4">
                     <div className="col-sm-2"></div>
                     <div className="col-sm-8 col-12">
-                        Enter in <em>where</em> you did something for others, starting with the country,
-                        and followed by the city. Don't forget to enter in the code on the coin!<br /><br />
+                        <h1 className="display-1 header">Submit your good deed</h1>
+                        In the form below, enter <em>in what city</em> you did something good for others.<br /><br />
 
-                        <em>Note: Please see the FAQ page regarding how soon submissions will be updated on the map.</em>
+                        <em>Note: Please see the <a href="#/faq">FAQ page</a> regarding how soon submissions will be updated on the map.</em>
                     </div>
                     <div className="col-sm-2"></div>
                 </div>
@@ -258,6 +258,10 @@ function Action() {
                                         {cities}
                                     </select>
                                 </div>
+                                {userCountry !== "" && userStateProvince !== "" && userCity === "" ?
+                                    <p className="mt-4 text-start text-md-center">
+                                        Is your city not in this list? Head on over to <a href="/#addcity">this page</a> to get it added
+                                    </p> : null}
                             </div>
                             <div className="form-group row mb-2">
                                 <label className="col-sm-2 col-form-label text-start text-md-center">Code</label>

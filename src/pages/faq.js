@@ -3,7 +3,7 @@ import React from "react";
 import updateTime from "../data/lastupdatetime";
 
 function Faq() {
-    
+
     return (
         <div className="App">
             <Header page={"faq"} />
@@ -11,6 +11,7 @@ function Faq() {
                 <div className="row mt-4">
                     <div className="col-sm-2"></div>
                     <div className="col-sm-8 col-12">
+                        <h1 className="display-1 header">FAQ</h1>
                         <h1 className="display-3 header">I can't see pins on the map</h1>
                         <p>First, choose a coin from the dropdown, then select the "Show" checkbox. You can then navigate by clicking on the buttons or panning the map.</p>
 
@@ -24,15 +25,16 @@ function Faq() {
                         <p>To manage my anxiousness, I discovered and began using, a haptic coin, which was on my mind when I felt inspired to create this project.</p>
 
                         <h1 className="display-3 header">Where does city data come from<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
-                        <p>
-                            Map data comes from <a href="https://simplemaps.com/data/world-cities">https://simplemaps.com/data/world-cities</a>.
-                        </p>
+                        <p>Map data comes from <a href="https://simplemaps.com/data/world-cities">https://simplemaps.com/data/world-cities</a>.</p>
+
+                        <h1 className="display-3 header">My city isn't listed as an option to choose</h1>
+                        <p>If your city isn't listed on the <a href="/#action">action page</a>, you can submit your city details on <a href="/#addcity">this page</a> and we will work to get your city added in a few working days.</p>
 
                         <h1 className="display-3 header">I have a suggestion for the website</h1>
                         <p>
                             Create a Github account and post an issue or discussion [or contribute] here: <a href="https://github.com/reZach/coinpass">https://github.com/reZach/coinpass</a>.
                         </p>
-                        <p style={{marginTop: "80px"}}><em>Data last updated on {new Date(updateTime.time).toLocaleDateString()}</em></p>
+                        <p style={{ marginTop: "80px" }}><em>Data last updated on {new Date(updateTime.time).toLocaleDateString()}</em></p>
                     </div>
                     <div className="col-sm-2"></div>
                 </div>

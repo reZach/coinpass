@@ -4,6 +4,7 @@ import "./index.css";
 import Map from "./pages/map";
 import Home from "./pages/home";
 import Action from "./pages/action";
+import AddCity from "./pages/addcity";
 import Stats from "./pages/stats";
 import Faq from "./pages/faq";
 import { createHashRouter, RouterProvider } from "react-router-dom";
@@ -23,6 +24,10 @@ const router = createHashRouter([
     element: <Action />
   },
   {
+    path: "/addcity",
+    element: <AddCity />
+  },
+  {
     path: "/stats",
     element: <Stats />
   },
@@ -32,7 +37,7 @@ const router = createHashRouter([
   }
 ]);
 
-const basename = document.querySelector("base")?.getAttribute("href") ?? "/" 
+const basename = document.querySelector("base")?.getAttribute("href") ?? "/"
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <RouterProvider router={router} basename={basename} />
