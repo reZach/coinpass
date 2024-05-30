@@ -9,9 +9,32 @@ const client = supabase.createClient(process.env.REACT_APP_SUPABASE_URL, process
 
 function Action() {
 
-    const [city, setCity] = useState([]);
-    const [userStateProvince, setStateProvince] = useState(0);
-    const [userCity, setUserCity] = useState(0);
+    function generateCountries() {
+
+        // todo - prioritize country based on ip
+        let usaIndex = geoCountries.countries.indexOf("United States");
+
+        let countries = [<option key={0} value=""></option>];
+        countries.push(<option key={geoCountries.countries[usaIndex]} value={geoCountries.countries[usaIndex]}>{geoCountries.countries[usaIndex]}</option>);
+        for (let i = 0; i < geoCountries.countries.length; i++) {
+
+            if (i !== usaIndex) {
+                countries.push(<option key={geoCountries.countries[i]} value={geoCountries.countries[i]}>{geoCountries.countries[i]}</option>);
+            }
+        }
+
+        return countries;
+    }
+
+    // Select options
+    const [countries, setCountries] = useState(() => generateCountries());
+    const [stateProvinces, setStateProvinces] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    // User selection
+    const [userCountry, setUserCountry] = useState("");
+    const [userStateProvince, setUserStateProvince] = useState("");
+    const [userCity, setUserCity] = useState("");
     const [code, setCode] = useState("");
     const [captcha, setCaptcha] = useState("");
     const [submitAnother, setSubmitAnother] = useState(false);
@@ -29,43 +52,6 @@ function Action() {
         }
         init();
     }, []);
-
-    // todo - prioritize country based on ip
-    let usaIndex = geoCountries.countries.indexOf("United States");
-    
-    let countries = [<option key={0} value={0}></option>];
-    countries.push(<option key={geoCountries.countries[usaIndex]} value={geoCountries.countries[usaIndex]}>{geoCountries.countries[usaIndex]}</option>);
-    for (let i = 0; i < geoCountries.countries.length; i++) {
-
-        if (i !== usaIndex) {
-            countries.push(<option key={geoCountries.countries[i]} value={geoCountries.countries[i]}>{geoCountries.countries[i]}</option>);
-        }
-    }
-
-    let privateMap = {
-        "_": [{
-            id: 0,
-            display: ""
-        }]
-    };
-
-    for (let i = 0; i < geoCities.cities.length; i++) {
-        if (!privateMap.hasOwnProperty(geoCities.cities[i].country)) {
-            privateMap[geoCities.cities[i].country] = [];
-        }
-
-        privateMap[geoCities.cities[i].country].push({
-            id: geoCities.cities[i].id,
-            display: `${geoCities.cities[i].name}, ${geoCities.cities[i].state}`
-        });
-    }
-
-    let keys = Object.keys(privateMap);
-    for (let i = 0; i < keys.length; i++) {
-        privateMap[keys[i]].sort((a, b) => {
-            return a.display.localeCompare(b.display);
-        });
-    }
 
     const generateCaptcha = async function () {
         if (captchaValue.current !== undefined) {
@@ -100,7 +86,21 @@ function Action() {
     const submit = async (event) => {
         event.preventDefault();
 
-        if (userCity === 0) {
+        if (userCountry === "") {
+            Swal.fire({
+                title: "Invalid",
+                text: "Country not selected",
+                icon: "error"
+            });
+            return;
+        } else if (userStateProvince === "") {
+            Swal.fire({
+                title: "Invalid",
+                text: "State/province not selected",
+                icon: "error"
+            });
+            return;
+        } else if (userCity === "") {
             Swal.fire({
                 title: "Invalid",
                 text: "City not selected",
@@ -138,8 +138,11 @@ function Action() {
                 ])
                 .select();
 
+            setUserCountry("");
+            setUserStateProvince("");
             setUserCity("");
             setCode("");
+
             captchaValue.current = await generateCaptcha();
             setCaptcha("");
             setSubmitAnother(true);
@@ -165,12 +168,41 @@ function Action() {
     }
 
     const changeCountry = (event) => {
-        let arr = ["", ...privateMap[event.target.value]];
-        setCity(arr);
+        const newValue = event.target.value;
+
+        setUserStateProvince(""); // reset
+        setUserCountry(newValue);
+
+        let arr = [<option key={0} value={""}></option>];
+
+        if (newValue !== "") {
+            const keys = Object.keys(geoCities[newValue]);
+
+            for (let i = 0; i < keys.length; i++) {
+                arr.push(<option key={keys[i]} value={keys[i]}>{keys[i]}</option>);
+            }
+        }
+
+        setStateProvinces(arr);
     }
 
     const changeStateProvince = (event) => {
-        setUserCity(event.target.value);
+        const newValue = event.target.value;
+
+        setUserCity(""); // reset
+        setUserStateProvince(newValue);
+
+        let arr = [<option key={0} value={""}></option>];
+
+        if (newValue !== "") {
+            let cities = geoCities[userCountry][newValue];
+
+            for (let i = 0; i < cities.length; i++) {
+                arr.push(<option key={cities[i].id} value={cities[i].id}>{cities[i].name}</option>);
+            }
+        }
+
+        setCities(arr);
     }
 
     const changeCity = (event) => {
@@ -204,37 +236,37 @@ function Action() {
                     <div className="col-sm-8 col-12">
                         <form className="needs-validation mb-2" onSubmit={submit}>
                             <div className="form-group row mb-2">
-                                <label className="col-sm-2 col-form-label">Country</label>
+                                <label className="col-sm-2 col-form-label text-start text-md-center">Country</label>
                                 <div className="col-sm-10">
-                                    <select className="form-control" onChange={changeCountry} required>
+                                    <select className="form-control" onChange={changeCountry} value={userCountry} required>
                                         {countries}
                                     </select>
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label className="col-sm-2 col-form-label">State/Province</label>
+                                <label className="col-sm-2 col-form-label text-start text-md-center">State/Province</label>
                                 <div className="col-sm-10">
-                                    <select className="form-control" onChange={changeStateProvince} value={userCity} disabled={city.length === 0} placeholder={(city.length === 0 ? "Disabled" : "")} required>
-                                        {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
+                                    <select className="form-control" onChange={changeStateProvince} value={userStateProvince} disabled={userCountry === ""} required>
+                                        {stateProvinces}
                                     </select>
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label className="col-sm-2 col-form-label">City</label>
+                                <label className="col-sm-2 col-form-label text-start text-md-center">City</label>
                                 <div className="col-sm-10">
-                                    <select className="form-control" onChange={changeCity} value={userCity} disabled={city.length === 0} placeholder={(city.length === 0 ? "Disabled" : "")} required>
-                                        {city.map((c, index) => <option key={c.id} value={c.id}>{c.display}</option>)}
+                                    <select className="form-control" onChange={changeCity} value={userCity} disabled={userCountry === "" || userStateProvince === ""} required>
+                                        {cities}
                                     </select>
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label className="col-sm-2 col-form-label">Code</label>
+                                <label className="col-sm-2 col-form-label text-start text-md-center">Code</label>
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" placeholder="The code on your coin" value={code} onChange={changeCode} required />
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
-                                <label className="col-sm-2 col-form-label">Captcha</label>
+                                <label className="col-sm-2 col-form-label text-start text-md-center">Captcha</label>
                                 <div className="col-sm-10">
                                     <canvas id="js-canvas" className="text-white" width="300" height="100"></canvas>
                                     <input type="text" className="form-control" placeholder="Enter captcha value above" value={captcha} onChange={changeCaptcha} required />
