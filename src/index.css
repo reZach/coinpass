@@ -79,3 +79,7 @@ code {
 .App {
   height: 100%;
 }
+
+#js-canvas {
+  background: repeating-linear-gradient(45deg, #171414, #ebf8e1 20%, #a6641c 5%);
+}

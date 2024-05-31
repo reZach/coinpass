@@ -43,10 +43,12 @@ function AddCity() {
 
         const canvas = document.getElementById("js-canvas");
         const context = canvas.getContext("2d");
+        const center = canvas.width / 2;
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.fillStyle = "#000000";
         context.font = "32px \"Lato-Regular\"";
-        context.fillText(ChangeCaptcha, 0, 50);
+        context.textAlign = "center";
+        context.fillText(ChangeCaptcha, center, 50);
 
         return ChangeCaptcha;
     }
