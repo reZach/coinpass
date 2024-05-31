@@ -46,6 +46,81 @@ function Action() {
         async function init() {
             if (!initialized.current) {
                 initialized.current = true;
+
+                if ("geolocation" in navigator) {
+                    /* geolocation is available */
+
+                    // Attempt to automatically set the closest city to our
+                    navigator.geolocation.getCurrentPosition((position) => {
+
+                        let closest = {};
+
+                        const countries = Object.keys(geoCities);
+
+                        for (let i = 0; i < countries.length; i++) {
+                            const statesProvinces = Object.keys(geoCities[countries[i]]);
+
+                            for (let j = 0; j < statesProvinces.length; j++) {
+
+                                const cities = Object.keys(geoCities[countries[i]][statesProvinces[j]]);
+
+                                for (let k = 0; k < cities.length; k++) {
+
+                                    let distance = Math.sqrt(Math.pow(position.coords.longitude - geoCities[countries[i]][statesProvinces[j]][k].lng, 2) + Math.pow(position.coords.latitude - geoCities[countries[i]][statesProvinces[j]][k].lat, 2));
+
+                                    // For the first city we encounter in the loop
+                                    if (Object.keys(closest).length === 0) {
+                                        closest = {
+                                            country: countries[i],
+                                            stateProvince: statesProvinces[j],
+                                            city: geoCities[countries[i]][statesProvinces[j]][k].id,
+                                            lat: geoCities[countries[i]][statesProvinces[j]][k].lat,
+                                            lng: geoCities[countries[i]][statesProvinces[j]][k].lng,
+                                            distance: distance
+                                        }
+                                    } else {
+
+                                        // Save the city that is closer to us
+                                        if (distance < closest.distance) {
+                                            closest = {
+                                                country: countries[i],
+                                                stateProvince: statesProvinces[j],
+                                                city: geoCities[countries[i]][statesProvinces[j]][k].id,
+                                                lat: geoCities[countries[i]][statesProvinces[j]][k].lat,
+                                                lng: geoCities[countries[i]][statesProvinces[j]][k].lng,
+                                                distance: distance
+                                            }
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+                        }
+
+                        // Update the controls to reflect the closest city to our location
+                        changeCountry({
+                            target: {
+                                value: closest.country
+                            }
+                        });
+                        changeStateProvince({
+                            target: {
+                                value: closest.stateProvince
+                            },
+                            hack_country: closest.country
+                        });
+                        changeCity({
+                            target: {
+                                value: closest.city
+                            }
+                        });
+                    });
+                } else {
+                    /* geolocation IS NOT available */
+
+                }
             }
 
             captchaValue.current = await generateCaptcha();
@@ -70,10 +145,12 @@ function Action() {
 
         await document.fonts.ready;
 
-        const contex = document.getElementById("js-canvas").getContext("2d");
-        contex.fillStyle = "#000000";
-        contex.font = "32px \"Lato-Regular\"";
-        contex.fillText(ChangeCaptcha, 0, 50);
+        const canvas = document.getElementById("js-canvas");
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#000000";
+        context.font = "32px \"Lato-Regular\"";
+        context.fillText(ChangeCaptcha, 0, 50);
 
         return ChangeCaptcha;
     }
@@ -154,13 +231,14 @@ function Action() {
             });
         } else {
 
-            // prevent spamming the DB            
-            captchaValue.current = await generateCaptcha();
-            setCaptcha("");
+            // prevent spamming the DB  
+            captchaValue.current = undefined; // Needed to set to regenerate the captcha value [with the line below]
+            captchaValue.current = await generateCaptcha();            
+            setCaptcha(""); // Force user to re-enter the new value
 
             Swal.fire({
                 title: "Invalid",
-                text: "We were unable to submit your details",
+                text: "We were unable to submit your action, please try again",
                 icon: "error"
             });
             return;
@@ -195,7 +273,20 @@ function Action() {
         let arr = [<option key={0} value={""}></option>];
 
         if (newValue !== "") {
-            let cities = geoCities[userCountry][newValue];
+
+            let cities;
+
+            // Hack; pull from a custom property when we call this method
+            // from page init when pulling user geolocation details. We do this
+            // because calling changeStateProvince when we pull geolocation details
+            // doesn't properly update the state of 'userCountry' in time and
+            // I don't know of a nice way to daisy-chain waiting for 'userCountry'
+            // to populate
+            if (userCountry === "") {
+                cities = geoCities[event.hack_country][newValue];
+            } else {
+                cities = geoCities[userCountry][newValue];
+            }
 
             for (let i = 0; i < cities.length; i++) {
                 arr.push(<option key={cities[i].id} value={cities[i].id}>{cities[i].name}</option>);
@@ -210,7 +301,7 @@ function Action() {
     }
 
     const changeCode = (event) => {
-        setCode(event.target.value);
+        setCode(event.target.value.toUpperCase());
     }
 
     const changeCaptcha = (event) => {
@@ -266,7 +357,7 @@ function Action() {
                             <div className="form-group row mb-2">
                                 <label className="col-sm-2 col-form-label text-start text-md-center">Code</label>
                                 <div className="col-sm-10">
-                                    <input type="text" className="form-control" placeholder="The code on your coin" value={code} onChange={changeCode} required />
+                                    <input type="text" className="form-control" placeholder="This value will begin with two letters" value={code} onChange={changeCode} required />
                                 </div>
                             </div>
                             <div className="form-group row mb-2">

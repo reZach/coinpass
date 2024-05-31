@@ -41,10 +41,12 @@ function AddCity() {
 
         await document.fonts.ready;
 
-        const contex = document.getElementById("js-canvas").getContext("2d");
-        contex.fillStyle = "#000000";
-        contex.font = "32px \"Lato-Regular\"";
-        contex.fillText(ChangeCaptcha, 0, 50);
+        const canvas = document.getElementById("js-canvas");
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#000000";
+        context.font = "32px \"Lato-Regular\"";
+        context.fillText(ChangeCaptcha, 0, 50);
 
         return ChangeCaptcha;
     }
@@ -92,10 +94,11 @@ function AddCity() {
             text: "We'll review, and work to add your city within a few working days.",
             icon: "success"
         });
-
-        // prevent spamming the DB            
+        
+        // prevent spamming the DB  
+        // captchaValue.current = undefined; // Needed to set to regenerate the captcha value [with the line below]
         // captchaValue.current = await generateCaptcha();
-        // setCaptcha("");
+        // setCaptcha(""); // Force user to re-enter the new value
 
         // Swal.fire({
         //     title: "Invalid",
