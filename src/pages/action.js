@@ -233,7 +233,7 @@ function Action() {
 
             // prevent spamming the DB  
             captchaValue.current = undefined; // Needed to set to regenerate the captcha value [with the line below]
-            captchaValue.current = await generateCaptcha();            
+            captchaValue.current = await generateCaptcha();
             setCaptcha(""); // Force user to re-enter the new value
 
             Swal.fire({
