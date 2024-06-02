@@ -22,7 +22,7 @@ function Faq() {
                         <p>A limited run of coins were minted; there is no way to get a coin unless you receive it from someone else. I've toyed with the idea of minting more coins in the future if the idea gets popular.</p>
 
                         <h1 className="display-3 header">Why coins and not something else<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
-                        <p>To manage my anxiousness, I discovered and began using, a haptic coin, which was on my mind when I felt inspired to create this project.</p>
+                        <p>I wanted to use something that was tangible and easily tradeable between people.</p>
 
                         <h1 className="display-3 header">Where does city data come from<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
                         <p>Map data comes from <a href="https://simplemaps.com/data/world-cities">https://simplemaps.com/data/world-cities</a>.</p>
