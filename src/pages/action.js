@@ -351,7 +351,7 @@ function Action() {
                                         {cities}
                                     </select>
                                 </div>
-                                {userCountry !== "" && userStateProvince !== "" && userCity === "" ?
+                                {userCountry !== "" && userStateProvince !== "" ?
                                     <p className="mt-4 text-start text-md-center">
                                         Is your city not in this list? Head on over to <a href="/#addcity">this page</a> to get it added
                                     </p> : null}
