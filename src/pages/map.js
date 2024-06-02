@@ -7,6 +7,7 @@ import pinsData from "../data/pins.json";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function Map() {
+    const [disableMap, setDisableMap] = useState(false || mapboxgl.accessToken === null || typeof mapboxgl.accessToken === "undefined"); // Kill s witch in case I need to turn off the map
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(-92.47);
@@ -159,7 +160,7 @@ function Map() {
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
-                m = [...m, marker];                
+                m = [...m, marker];
 
                 lineToDraw.push([coords[i].longitude + offsetValue, coords[i].latitude]);
 
@@ -172,7 +173,7 @@ function Map() {
                 detailsToDraw = [];
             }
 
-            setMarkers(m);            
+            setMarkers(m);
 
             let route = {
                 "type": "FeatureCollection",
@@ -215,7 +216,7 @@ function Map() {
     }
 
     useEffect(() => {
-        if (map.current) return; // initialize map only once
+        if (disableMap || map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: "mapbox://styles/mapbox/streets-v12",
@@ -236,72 +237,96 @@ function Map() {
         });
     }, []);
 
-    return (
-        <div className="App text-white">
-            <Header page={"map"} />
-            <div ref={mapContainer} className="map-container" />
-            <div className="map-overlay bottom text-black">
-                <div className="map-overlay-inner container">
-                    <div className="row d-none d-sm-flex">
-                        <div className="col">
-                            <fieldset>
-                                <label style={{ alignSelf: "center" }}>Coin</label>
-                                <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
-                                    {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
-                                        return <option key={index} value={cn}>{cn}</option>
-                                    })]}
-                                </select>
-                            </fieldset>
+    if (disableMap) {
+        return (
+            <div className="App">
+                <Header page={"map"} />
+                <div className="mt-4">
+                    <div className="row">
+                        <div className="col-sm-2"></div>
+                        <div className="col-sm-8 col-12">
+                            <h1 className="display-1 header">We are sorry!</h1>
+                            This project has no external funding and is limited to a certain number of map loads per month.
+                            We have exceeded the allowed free limit of map loads and need to turn off the rendered map until month's end in order
+                            to be able to keep this website live and operational.<br /><br />
+                            
+                            Actions can still be submitted <a href="#/action">here</a>,
+                            and submissions will be reflected on the <a href="#/stats">stats page</a> when website data is refreshed based on
+                            the website update schedule defined on the <a href="#/faq">FAQ page</a>.
                         </div>
-                        <div className="col" style={{ alignSelf: "center" }}>
-                            <fieldset>
-                                <label>Show</label>
-                                <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
-                            </fieldset>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
-                        </div>
+                        <div className="col-sm-2"></div>
                     </div>
-                    <div className="row mb-2 d-flex d-sm-none">
-                        <div className="col">
-                            <fieldset>
-                                <label style={{ alignSelf: "center" }}>Coin</label>
-                                <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
-                                    {[<option key="-1" value="">-choose-</option>, coinNames.map((cn, index) => {
-                                        return <option key={index} value={cn}>{cn}</option>
-                                    })]}
-                                </select>
-                            </fieldset>
+                </div>
+            </div>
+        );
+    } else {
+        return (
+            <div className="App">
+                <Header page={"map"} />
+                <div ref={mapContainer} className="map-container" />
+                <div className="map-overlay bottom text-black">
+                    <div className="map-overlay-inner container">
+                        <div className="row d-none d-sm-flex">
+                            <div className="col">
+                                <fieldset>
+                                    <label style={{ alignSelf: "center" }}>Coin</label>
+                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
+                                        {[<option key="-1" value="">Choose</option>, coinNames.map((cn, index) => {
+                                            return <option key={index} value={cn}>{cn}</option>
+                                        })]}
+                                    </select>
+                                </fieldset>
+                            </div>
+                            <div className="col" style={{ alignSelf: "center" }}>
+                                <fieldset>
+                                    <label>Show</label>
+                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
+                                </fieldset>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                            </div>
                         </div>
-                        <div className="col" style={{ alignSelf: "center" }}>
-                            <fieldset>
-                                <label>Show</label>
-                                <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
-                            </fieldset>
+                        <div className="row mb-2 d-flex d-sm-none">
+                            <div className="col">
+                                <fieldset>
+                                    <label style={{ alignSelf: "center" }}>Coin</label>
+                                    <select id="lightPreset" name="lightPreset" className="form-select" style={{ minWidth: "128px" }} onChange={changeCoin}>
+                                        {[<option key="-1" value="">-choose-</option>, coinNames.map((cn, index) => {
+                                            return <option key={index} value={cn}>{cn}</option>
+                                        })]}
+                                    </select>
+                                </fieldset>
+                            </div>
+                            <div className="col" style={{ alignSelf: "center" }}>
+                                <fieldset>
+                                    <label>Show</label>
+                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row d-flex d-sm-none">
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                        <div className="row d-flex d-sm-none">
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                            </div>
+                            <div className="col">
+                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default Map;

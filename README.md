@@ -1,10 +1,10 @@
 # Good Samaritan Movement
-> A project meant to inspire you by showing that even one small act of love
+A project meant to inspire you by showing that even one small act of love
 can have a rippling effect across the world.
 
-### To update pins
+### To update pins/cities
 1. Pull repo
-2. Run `npm run updatepins`
+2. Run `npm run update`
 3. Commit changes to repo
 4. `npm run deploy`
 
