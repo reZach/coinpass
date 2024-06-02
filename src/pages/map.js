@@ -7,7 +7,7 @@ import pinsData from "../data/pins.json";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 function Map() {
-    const [disableMap, setDisableMap] = useState(false || mapboxgl.accessToken === null || typeof mapboxgl.accessToken === "undefined"); // Kill s witch in case I need to turn off the map
+    const [disableMap, setDisableMap] = useState(false || mapboxgl.accessToken === null || typeof mapboxgl.accessToken === "undefined"); // Kill switch in case I need to turn off the map
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(-92.47);
