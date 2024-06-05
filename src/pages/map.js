@@ -10,6 +10,7 @@ function Map() {
     const [disableMap, setDisableMap] = useState(false || mapboxgl.accessToken === null || typeof mapboxgl.accessToken === "undefined"); // Kill switch in case I need to turn off the map
     const mapContainer = useRef(null);
     const map = useRef(null);
+    const allKey = useRef("-all-");
     const [lng, setLng] = useState(-92.47);
     const [lat, setLat] = useState(38.25);
     const [zoom, setZoom] = useState(3);
@@ -94,6 +95,16 @@ function Map() {
         } else {
             setSelectedCoin(newCoin);
             setCoords(pinsData[newCoin]);
+
+            if (selectedCoin !== "") {
+
+                show({
+                    target: {
+                        checked: showCheckbox
+                    },
+                    override: pinsData[newCoin] /* hack to force render these as the wait for state update happens too slowly to be caught in the "show" method */
+                });
+            }
         }
     }
 
@@ -107,25 +118,31 @@ function Map() {
             let detailsToDraw = [];
             let offsets = [];
             let m = []; // markers
+            let coordinates = typeof event.override !== "undefined" ? event.override : coords;
 
-            for (let i = 0; i < coords.length; i++) {
+            // remove existing markers            
+            for (let v = 0; v < markers.length; v++) {
+                markers[v].remove();
+            }
+
+            for (let i = 0; i < coordinates.length; i++) {
 
                 detailsToDraw.push({
-                    longitude: coords[i].longitude,
-                    latitude: coords[i].latitude,
-                    date: coords[i].date
+                    longitude: coordinates[i].longitude,
+                    latitude: coordinates[i].latitude,
+                    date: coordinates[i].date
                 });
 
                 // check to see if subsequent coin passes are in the same city
-                for (let j = i + 1; j < coords.length; j++) {
+                for (let j = i + 1; j < coordinates.length; j++) {
 
-                    if (coords[j].longitude === coords[i].longitude &&
-                        coords[j].latitude === coords[i].latitude) {
+                    if (coordinates[j].longitude === coordinates[i].longitude &&
+                        coordinates[j].latitude === coordinates[i].latitude) {
 
                         detailsToDraw.push({
-                            longitude: coords[j].longitude,
-                            latitude: coords[j].latitude,
-                            date: coords[j].date
+                            longitude: coordinates[j].longitude,
+                            latitude: coordinates[j].latitude,
+                            date: coordinates[j].date
                         });
                     } else {
                         break;
@@ -146,23 +163,23 @@ function Map() {
                 let html;
 
                 if (detailsToDraw.length === 1) {
-                    html = `Person ${i + 1}: ${coords[i].date}`;
+                    html = `Person ${i + 1}: ${coordinates[i].date}`;
                 } else {
-                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coords[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
+                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coordinates[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
                 }
 
-                html += `<br />${coords[i].city}, ${coords[i].state}`;
+                html += `<br />${coordinates[i].city}, ${coordinates[i].state}`;
 
                 let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
 
                 let marker = new mapboxgl.Marker()
-                    .setLngLat([coords[i].longitude + offsetValue, coords[i].latitude])
+                    .setLngLat([coordinates[i].longitude + offsetValue, coordinates[i].latitude])
                     .setPopup(new mapboxgl.Popup().setHTML(html))
                     .addTo(map.current);
 
                 m = [...m, marker];
 
-                lineToDraw.push([coords[i].longitude + offsetValue, coords[i].latitude]);
+                lineToDraw.push([coordinates[i].longitude + offsetValue, coordinates[i].latitude]);
 
                 // We adjust i to account for if we are grouping multiple
                 // "passes" in a single pin on the map. 
@@ -188,6 +205,14 @@ function Map() {
                 ]
             };
 
+            // Remove any existing pins/route if already on the map
+            if (typeof map.current.getLayer("route") !== "undefined") {
+                map.current.removeLayer("route");
+            }
+            if (typeof map.current.getSource("route") !== "undefined") {
+                map.current.removeSource("route");
+            }
+
             map.current.addSource("route", {
                 "type": "geojson",
                 "data": route
@@ -203,8 +228,13 @@ function Map() {
                 }
             });
         } else {
-            map.current.removeLayer("route");
-            map.current.removeSource("route");
+
+            if (typeof map.current.getLayer("route") !== "undefined") {
+                map.current.removeLayer("route");
+            }
+            if (typeof map.current.getSource("route") !== "undefined") {
+                map.current.removeSource("route");
+            }
 
             let m = markers;
             for (let v = 0; v < m.length; v++) {
@@ -226,7 +256,11 @@ function Map() {
 
         // Pull names of coins from our data file
         map.current.on("load", () => {
-            const coins = Object.keys(pinsData).sort();
+            let coins = Object.keys(pinsData).sort();
+
+            if (coins.length > 0) {
+                coins = [allKey.current, ...coins];
+            }
 
             setCoinNames(coins);
         });
@@ -249,7 +283,7 @@ function Map() {
                             This project has no external funding and is limited to a certain number of map loads per month.
                             We have exceeded the allowed free limit of map loads and need to turn off the rendered map until month's end in order
                             to be able to keep this website live and operational.<br /><br />
-                            
+
                             Actions can still be submitted <a href="#/action">here</a>,
                             and submissions will be reflected on the <a href="#/stats">stats page</a> when website data is refreshed based on
                             the website update schedule defined on the <a href="#/faq">FAQ page</a>.
@@ -280,7 +314,7 @@ function Map() {
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label>Show</label>
-                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} value={showCheckbox} />
+                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} checked={showCheckbox} />
                                 </fieldset>
                             </div>
                             <div className="col">
