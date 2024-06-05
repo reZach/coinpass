@@ -37,7 +37,6 @@ function Action() {
     const [userCity, setUserCity] = useState("");
     const [code, setCode] = useState("");
     const [captcha, setCaptcha] = useState("");
-    const [submitAnother, setSubmitAnother] = useState(false);
 
     const initialized = useRef(false);
     const captchaValue = useRef(undefined);
@@ -222,9 +221,9 @@ function Action() {
             setUserCity("");
             setCode("");
 
+            captchaValue.current = undefined; // Needed to set to regenerate the captcha value [with the line below]
             captchaValue.current = await generateCaptcha();
-            setCaptcha("");
-            setSubmitAnother(true);
+            setCaptcha(""); // Force user to re-enter the new value            
 
             Swal.fire({
                 title: "Good job!",
@@ -370,12 +369,9 @@ function Action() {
                                 </div>
                             </div>
                             <div className="row">
-                                <button className="btn btn-primary" type="submit" disabled={submitAnother ? "disabled" : ""}>Submit</button>
+                                <button className="btn btn-primary" type="submit">Submit</button>
                             </div>
                         </form>
-                        <div className="row mb-2" style={{ display: submitAnother ? "flex" : "none" }}>
-                            <button className="btn btn-primary" type="button" onClick={refreshPage}>Click here to submit another</button>
-                        </div>
                     </div>
                     <div className="col-sm-2"></div>
                 </div>
