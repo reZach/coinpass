@@ -94,7 +94,13 @@ function Map() {
             setCoords([]);
         } else {
             setSelectedCoin(newCoin);
-            setCoords(pinsData[newCoin]);
+
+            // Render a normal coin, otherwise all coin data
+            if (allKey.current !== newCoin) {
+                setCoords(pinsData[newCoin]);
+            } else {
+                setCoords(pinsData);
+            }
 
             if (selectedCoin !== "") {
 
@@ -102,7 +108,7 @@ function Map() {
                     target: {
                         checked: showCheckbox
                     },
-                    override: pinsData[newCoin] /* hack to force render these as the wait for state update happens too slowly to be caught in the "show" method */
+                    override: (allKey.current !== newCoin) ? pinsData[newCoin] : pinsData /* hack to force render these as the wait for state update happens too slowly to be caught in the "show" method */
                 });
             }
         }
@@ -125,108 +131,191 @@ function Map() {
                 markers[v].remove();
             }
 
-            for (let i = 0; i < coordinates.length; i++) {
 
-                detailsToDraw.push({
-                    longitude: coordinates[i].longitude,
-                    latitude: coordinates[i].latitude,
-                    date: coordinates[i].date
-                });
+            if (coordinates.constructor === Object) {
 
-                // check to see if subsequent coin passes are in the same city
-                for (let j = i + 1; j < coordinates.length; j++) {
+                let coinKeys = Object.keys(coordinates);
+                for (let a = 0; a < coinKeys.length; a++) {
 
-                    if (coordinates[j].longitude === coordinates[i].longitude &&
-                        coordinates[j].latitude === coordinates[i].latitude) {
+                    for (let i = 0; i < coordinates[coinKeys[a]].length; i++) {
 
                         detailsToDraw.push({
-                            longitude: coordinates[j].longitude,
-                            latitude: coordinates[j].latitude,
-                            date: coordinates[j].date
+                            longitude: coordinates[coinKeys[a]][i].longitude,
+                            latitude: coordinates[coinKeys[a]][i].latitude,
+                            date: coordinates[coinKeys[a]][i].date
                         });
-                    } else {
-                        break;
+
+                        // check to see if subsequent coin passes are in the same city
+                        for (let j = i + 1; j < coordinates[coinKeys[a]].length; j++) {
+
+                            if (coordinates[coinKeys[a]][j].longitude === coordinates[coinKeys[a]][i].longitude &&
+                                coordinates[coinKeys[a]][j].latitude === coordinates[coinKeys[a]][i].latitude) {
+
+                                detailsToDraw.push({
+                                    longitude: coordinates[coinKeys[a]][j].longitude,
+                                    latitude: coordinates[coinKeys[a]][j].latitude,
+                                    date: coordinates[coinKeys[a]][j].date
+                                });
+                            } else {
+                                break;
+                            }
+                        }
+
+                        let keys = Object.keys(offsets);
+
+                        if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`) === -1) {
+                            offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`] = 0; // 0 = no offsets
+                        } else {
+                            offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`]++;
+                        }
+
+
+                        let html = `Coin ${coinKeys[a]}<br />`;
+
+                        if (detailsToDraw.length === 1) {
+                            html += `Person ${i + 1}: ${coordinates[coinKeys[a]][i].date}`;
+                        } else {
+                            html += `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coordinates[coinKeys[a]][i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
+                        }
+
+                        html += `<br />${coordinates[coinKeys[a]][i].city}, ${coordinates[coinKeys[a]][i].state}`;
+
+                        let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
+
+                        let marker = new mapboxgl.Marker()
+                            .setLngLat([coordinates[coinKeys[a]][i].longitude + offsetValue, coordinates[coinKeys[a]][i].latitude])
+                            .setPopup(new mapboxgl.Popup().setHTML(html))
+                            .addTo(map.current);
+
+                        m = [...m, marker];
+
+                        //lineToDraw.push([coordinates[coinKeys[a]][i].longitude + offsetValue, coordinates[coinKeys[a]][i].latitude]);
+
+                        // We adjust i to account for if we are grouping multiple
+                        // "passes" in a single pin on the map. 
+                        if (detailsToDraw.length > 1) {
+                            i += (detailsToDraw.length - 1); // We subtract 1 so i lands on the proper next element to process in the array
+                        }
+
+                        detailsToDraw = [];
                     }
                 }
 
-                let keys = Object.keys(offsets);
+                setMarkers(m);
 
-                if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`) === -1) {
-                    offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`] = 0; // 0 = no offsets
-                } else {
-                    offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`]++;
+                // Remove any existing route if already on the map
+                if (typeof map.current.getLayer("route") !== "undefined") {
+                    map.current.removeLayer("route");
+                }
+                if (typeof map.current.getSource("route") !== "undefined") {
+                    map.current.removeSource("route");
                 }
 
+            } else {
+                for (let i = 0; i < coordinates.length; i++) {
 
+                    detailsToDraw.push({
+                        longitude: coordinates[i].longitude,
+                        latitude: coordinates[i].latitude,
+                        date: coordinates[i].date
+                    });
 
+                    // check to see if subsequent coin passes are in the same city
+                    for (let j = i + 1; j < coordinates.length; j++) {
 
-                let html;
+                        if (coordinates[j].longitude === coordinates[i].longitude &&
+                            coordinates[j].latitude === coordinates[i].latitude) {
 
-                if (detailsToDraw.length === 1) {
-                    html = `Person ${i + 1}: ${coordinates[i].date}`;
-                } else {
-                    html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coordinates[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
-                }
-
-                html += `<br />${coordinates[i].city}, ${coordinates[i].state}`;
-
-                let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
-
-                let marker = new mapboxgl.Marker()
-                    .setLngLat([coordinates[i].longitude + offsetValue, coordinates[i].latitude])
-                    .setPopup(new mapboxgl.Popup().setHTML(html))
-                    .addTo(map.current);
-
-                m = [...m, marker];
-
-                lineToDraw.push([coordinates[i].longitude + offsetValue, coordinates[i].latitude]);
-
-                // We adjust i to account for if we are grouping multiple
-                // "passes" in a single pin on the map. 
-                if (detailsToDraw.length > 1) {
-                    i += (detailsToDraw.length - 1); // We subtract 1 so i lands on the proper next element to process in the array
-                }
-
-                detailsToDraw = [];
-            }
-
-            setMarkers(m);
-
-            let route = {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": lineToDraw
+                            detailsToDraw.push({
+                                longitude: coordinates[j].longitude,
+                                latitude: coordinates[j].latitude,
+                                date: coordinates[j].date
+                            });
+                        } else {
+                            break;
                         }
                     }
-                ]
-            };
 
-            // Remove any existing pins/route if already on the map
-            if (typeof map.current.getLayer("route") !== "undefined") {
-                map.current.removeLayer("route");
-            }
-            if (typeof map.current.getSource("route") !== "undefined") {
-                map.current.removeSource("route");
-            }
+                    let keys = Object.keys(offsets);
 
-            map.current.addSource("route", {
-                "type": "geojson",
-                "data": route
-            });
+                    if (keys.indexOf(`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`) === -1) {
+                        offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`] = 0; // 0 = no offsets
+                    } else {
+                        offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`]++;
+                    }
 
-            map.current.addLayer({
-                "id": "route",
-                "source": "route",
-                "type": "line",
-                "paint": {
-                    "line-width": 2,
-                    "line-color": "#007cbf"
+
+
+
+                    let html;
+
+                    if (detailsToDraw.length === 1) {
+                        html = `Person ${i + 1}: ${coordinates[i].date}`;
+                    } else {
+                        html = `Persons ${i + 1}-${i + 1 + (detailsToDraw.length - 1)}: ${coordinates[i].date} - ${detailsToDraw[detailsToDraw.length - 1].date}`;
+                    }
+
+                    html += `<br />${coordinates[i].city}, ${coordinates[i].state}`;
+
+                    let offsetValue = 0.0005 * offsets[`${detailsToDraw[detailsToDraw.length - 1].longitude}|${detailsToDraw[detailsToDraw.length - 1].latitude}`];
+
+                    let marker = new mapboxgl.Marker()
+                        .setLngLat([coordinates[i].longitude + offsetValue, coordinates[i].latitude])
+                        .setPopup(new mapboxgl.Popup().setHTML(html))
+                        .addTo(map.current);
+
+                    m = [...m, marker];
+
+                    lineToDraw.push([coordinates[i].longitude + offsetValue, coordinates[i].latitude]);
+
+                    // We adjust i to account for if we are grouping multiple
+                    // "passes" in a single pin on the map. 
+                    if (detailsToDraw.length > 1) {
+                        i += (detailsToDraw.length - 1); // We subtract 1 so i lands on the proper next element to process in the array
+                    }
+
+                    detailsToDraw = [];
                 }
-            });
+
+                setMarkers(m);
+
+                let route = {
+                    "type": "FeatureCollection",
+                    "features": [
+                        {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "LineString",
+                                "coordinates": lineToDraw
+                            }
+                        }
+                    ]
+                };
+
+                // Remove any existing route if already on the map
+                if (typeof map.current.getLayer("route") !== "undefined") {
+                    map.current.removeLayer("route");
+                }
+                if (typeof map.current.getSource("route") !== "undefined") {
+                    map.current.removeSource("route");
+                }
+
+                map.current.addSource("route", {
+                    "type": "geojson",
+                    "data": route
+                });
+
+                map.current.addLayer({
+                    "id": "route",
+                    "source": "route",
+                    "type": "line",
+                    "paint": {
+                        "line-width": 2,
+                        "line-color": "#007cbf"
+                    }
+                });
+            }
+
         } else {
 
             if (typeof map.current.getLayer("route") !== "undefined") {
