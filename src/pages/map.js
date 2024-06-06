@@ -21,6 +21,32 @@ function Map() {
     const [panningIndex, setPanningIndex] = useState(-1);
     const [coords, setCoords] = useState([]);
 
+    useEffect(() => {
+        if (disableMap || map.current) return; // initialize map only once
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: "mapbox://styles/mapbox/streets-v12",
+            center: [lng, lat],
+            zoom: zoom
+        });
+
+        // Pull names of coins from our data file
+        map.current.on("load", () => {
+            let coins = Object.keys(pinsData).sort();
+
+            if (coins.length > 0) {
+                coins = [allKey.current, ...coins];
+            }
+
+            setCoinNames(coins);
+        });
+
+        // If the user pans on the map, reset what marker they have focused on
+        map.current.on("drag", () => {
+            setPanningIndex(-1);
+        });
+    }, []);
+
     // Call this code when panningIndex is updated;
     // this code moves the camera to the selected pin
     useEffect(() => {
@@ -40,91 +66,17 @@ function Map() {
         }
     }, [panningIndex]);
 
-    const onlyShowActiveMarker = function (indexToShow) {
-        for (let i = 0; i < markers.length; i++) {
-            const p = markers[i].getPopup();
-
-            if (i !== indexToShow && p.isOpen()) {
-                markers[i].togglePopup();
-            } else if (i === indexToShow && !p.isOpen()) {
-                markers[i].togglePopup();
-            }
-        }
-    }
-
-    // Start the navigation for a coin at the very beginning
-    const start = (event) => {
-        event.preventDefault();
-
-        setPanningIndex(0);
-        onlyShowActiveMarker(0);
-    }
-
-    // To navigate to the previous location a coin has been
-    const previous = (event) => {
-        event.preventDefault();
-
-        if (panningIndex > 0) {
-            setPanningIndex(panningIndex - 1);
-            onlyShowActiveMarker(panningIndex - 1);
-        }
-    }
-
-    // To navigate to the next location a coin has been
-    const next = (event) => {
-        event.preventDefault();
-
-        if (panningIndex < coords.length) {
-            setPanningIndex(panningIndex + 1);
-            onlyShowActiveMarker(panningIndex + 1);
-        }
-    }
-
-    // When we change the selected coin, store relevant
-    // data for that coin
-    const changeCoin = (event) => {
-        event.preventDefault();
-
-        let newCoin = event.target.value;
-
-        if (newCoin === "") {
-
-            // clear anything out
-            setSelectedCoin("");
-            setCoords([]);
-        } else {
-            setSelectedCoin(newCoin);
-
-            // Render a normal coin, otherwise all coin data
-            if (allKey.current !== newCoin) {
-                setCoords(pinsData[newCoin]);
-            } else {
-                setCoords(pinsData);
-            }
-
-            if (selectedCoin !== "") {
-
-                show({
-                    target: {
-                        checked: showCheckbox
-                    },
-                    override: (allKey.current !== newCoin) ? pinsData[newCoin] : pinsData /* hack to force render these as the wait for state update happens too slowly to be caught in the "show" method */
-                });
-            }
-        }
-    }
-
-    const show = (event) => {
-        setShowCheckbox(event.target.checked);
-
-        if (event.target.checked) {
+    useEffect(() => {
+        if (showCheckbox) {
             // eventually do https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
 
             let lineToDraw = [];
             let detailsToDraw = [];
             let offsets = [];
             let m = []; // markers
-            let coordinates = typeof event.override !== "undefined" ? event.override : coords;
+            let coordinates = (allKey.current !== selectedCoin) ? pinsData[selectedCoin] : pinsData;
+
+            setCoords(coordinates);
 
             // remove existing markers            
             for (let v = 0; v < markers.length; v++) {
@@ -332,33 +284,63 @@ function Map() {
 
             setMarkers([]);
         }
+    }, [selectedCoin, showCheckbox]);
+
+    const onlyShowActiveMarker = function (indexToShow) {
+        for (let i = 0; i < markers.length; i++) {
+            const p = markers[i].getPopup();
+
+            if (i !== indexToShow && p.isOpen()) {
+                markers[i].togglePopup();
+            } else if (i === indexToShow && !p.isOpen()) {
+                markers[i].togglePopup();
+            }
+        }
     }
 
-    useEffect(() => {
-        if (disableMap || map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: "mapbox://styles/mapbox/streets-v12",
-            center: [lng, lat],
-            zoom: zoom
-        });
+    // Start the navigation for a coin at the very beginning
+    const start = (event) => {
+        event.preventDefault();
 
-        // Pull names of coins from our data file
-        map.current.on("load", () => {
-            let coins = Object.keys(pinsData).sort();
+        setPanningIndex(0);
+        onlyShowActiveMarker(0);
+    }
 
-            if (coins.length > 0) {
-                coins = [allKey.current, ...coins];
-            }
+    // To navigate to the previous location a coin has been
+    const previous = (event) => {
+        event.preventDefault();
 
-            setCoinNames(coins);
-        });
+        if (panningIndex > 0) {
+            setPanningIndex(panningIndex - 1);
+            onlyShowActiveMarker(panningIndex - 1);
+        }
+    }
 
-        // If the user pans on the map, reset what marker they have focused on
-        map.current.on("drag", () => {
-            setPanningIndex(-1);
-        });
-    }, []);
+    // To navigate to the next location a coin has been
+    const next = (event) => {
+        event.preventDefault();
+
+        if (panningIndex < coords.length) {
+            setPanningIndex(panningIndex + 1);
+            onlyShowActiveMarker(panningIndex + 1);
+        }
+    }
+
+    const changeShow = (event) => {
+        event.preventDefault();
+
+        setShowCheckbox(event.target.checked);
+    }
+
+    // When we change the selected coin, store relevant
+    // data for that coin
+    const changeCoin = (event) => {
+        event.preventDefault();
+
+        let newCoin = event.target.value;
+
+        setSelectedCoin(newCoin);
+    }
 
     if (disableMap) {
         return (
@@ -403,7 +385,7 @@ function Map() {
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label>Show</label>
-                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={show} disabled={selectedCoin === ""} checked={showCheckbox} />
+                                    <input type="checkbox" role="switch" className="form-check-input" id="showPlaceLabels" onChange={changeShow} disabled={selectedCoin === ""} checked={showCheckbox} />
                                 </fieldset>
                             </div>
                             <div className="col">
@@ -430,7 +412,7 @@ function Map() {
                             <div className="col" style={{ alignSelf: "center" }}>
                                 <fieldset>
                                     <label>Show</label>
-                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={show} value={showCheckbox} disabled={selectedCoin === ""} />
+                                    <input type="checkbox" className="form-check-input" id="showPlaceLabels" onChange={changeShow} checked={showCheckbox} disabled={selectedCoin === ""} />
                                 </fieldset>
                             </div>
                         </div>
