@@ -76,12 +76,12 @@ function Map() {
                 if (typeof map.current.getSource("route") !== "undefined") {
                     map.current.removeSource("route");
                 }
-    
+
                 let m = markers;
                 for (let v = 0; v < m.length; v++) {
                     m[v].remove();
                 }
-    
+
                 setMarkers([]);
 
                 return;
@@ -392,6 +392,10 @@ function Map() {
             </div>
         );
     } else {
+        const startDisabled = !showCheckbox || selectedCoin === allKey.current || selectedCoin === "";
+        const previousDisabled = (panningIndex <= 0 || (selectedCoin === allKey.current || selectedCoin === ""));
+        const nextDisabled = ((panningIndex + 1 >= markers.length) || selectedCoin === allKey.current || selectedCoin === "");
+
         return (
             <div className="App">
                 <Header page={"map"} />
@@ -416,13 +420,13 @@ function Map() {
                                 </fieldset>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox || selectedCoin === allKey.current}>Start</button>
+                                <button className="btn btn-primary" onClick={start} disabled={startDisabled}>Start</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={previous} disabled={(panningIndex <= 0 || (selectedCoin === allKey.current)) ? "disabled" : ""}>Previous</button>
+                                <button className="btn btn-primary" onClick={previous} disabled={previousDisabled ? "disabled" : ""}>Previous</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={next} disabled={((panningIndex + 1 >= markers.length) || selectedCoin === allKey.current) ? "disabled" : ""}>Next</button>
+                                <button className="btn btn-primary" onClick={next} disabled={nextDisabled ? "disabled" : ""}>Next</button>
                             </div>
                         </div>
                         <div className="row mb-2 d-flex d-sm-none">
@@ -445,13 +449,13 @@ function Map() {
                         </div>
                         <div className="row d-flex d-sm-none">
                             <div className="col">
-                                <button className="btn btn-primary" onClick={start} disabled={showCheckbox === false}>Start</button>
+                                <button className="btn btn-primary" onClick={start} disabled={startDisabled}>Start</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                                <button className="btn btn-primary" onClick={previous} disabled={previousDisabled ? "disabled" : ""}>Previous</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                                <button className="btn btn-primary" onClick={next} disabled={nextDisabled ? "disabled" : ""}>Next</button>
                             </div>
                         </div>
                     </div>
