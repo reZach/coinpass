@@ -242,9 +242,6 @@ function Map() {
                     marker.getElement().addEventListener("click", function (event) {
                         console.log(event);
                     });
-                    // marker.getElement().addEventListener("click", (event) => {
-                    //     console.log("event");
-                    // });
 
                     m = [...m, marker];
 
