@@ -111,7 +111,13 @@ function AddCity() {
     }
 
     const changeUserCityToAdd = (event) => {
-        setUserCityToAdd(event.target.value);
+        let newValue = event.target.value;
+
+        if (newValue > 200){
+            newValue = newValue.substring(0, 199);
+        }
+
+        setUserCityToAdd(newValue);
     }
 
     const changeCaptcha = (event) => {
@@ -141,7 +147,7 @@ function AddCity() {
                             <div className="form-group row mb-2">
                                 <label className="col-sm-2 col-form-label text-start text-md-center">City to add</label>
                                 <div className="col-sm-10">
-                                    <textarea className="form-control" placeholder="Add details here such as the country and/or the state/province" value={userCityToAdd} onChange={changeUserCityToAdd} required />
+                                    <textarea className="form-control" placeholder="Add details here such as the country and/or the state/province" value={userCityToAdd} onChange={changeUserCityToAdd} maxlength="200" required />
                                 </div>
                             </div>
                             <div className="form-group row mb-2">
