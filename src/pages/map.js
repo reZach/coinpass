@@ -68,9 +68,28 @@ function Map() {
 
     useEffect(() => {
         if (showCheckbox) {
+
+            if (selectedCoin === "") {
+                if (typeof map.current.getLayer("route") !== "undefined") {
+                    map.current.removeLayer("route");
+                }
+                if (typeof map.current.getSource("route") !== "undefined") {
+                    map.current.removeSource("route");
+                }
+    
+                let m = markers;
+                for (let v = 0; v < m.length; v++) {
+                    m[v].remove();
+                }
+    
+                setMarkers([]);
+
+                return;
+            }
+
             // eventually do https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/
 
-            let lineToDraw = [];
+
             let detailsToDraw = [];
             let offsets = [];
             let m = []; // markers
@@ -84,6 +103,7 @@ function Map() {
             }
 
 
+            // When drawing all pins or some lines
             if (coordinates.constructor === Object) {
 
                 let coinKeys = Object.keys(coordinates);
@@ -122,7 +142,7 @@ function Map() {
                         }
 
 
-                        let html = `Coin ${coinKeys[a]}<br />`;
+                        let html = `Coin: ${coinKeys[a]}<br />`;
 
                         if (detailsToDraw.length === 1) {
                             html += `Person ${i + 1}: ${coordinates[coinKeys[a]][i].date}`;
@@ -164,6 +184,8 @@ function Map() {
                 }
 
             } else {
+                let lineToDraw = [];
+
                 for (let i = 0; i < coordinates.length; i++) {
 
                     detailsToDraw.push({
@@ -215,6 +237,14 @@ function Map() {
                         .setLngLat([coordinates[i].longitude + offsetValue, coordinates[i].latitude])
                         .setPopup(new mapboxgl.Popup().setHTML(html))
                         .addTo(map.current);
+
+
+                    marker.getElement().addEventListener("click", function (event) {
+                        console.log(event);
+                    });
+                    // marker.getElement().addEventListener("click", (event) => {
+                    //     console.log("event");
+                    // });
 
                     m = [...m, marker];
 
@@ -389,13 +419,13 @@ function Map() {
                                 </fieldset>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox}>Start</button>
+                                <button className="btn btn-primary" onClick={start} disabled={!showCheckbox || selectedCoin === allKey.current}>Start</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={previous} disabled={panningIndex <= 0 ? "disabled" : ""}>Previous</button>
+                                <button className="btn btn-primary" onClick={previous} disabled={(panningIndex <= 0 || (selectedCoin === allKey.current)) ? "disabled" : ""}>Previous</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-primary" onClick={next} disabled={panningIndex + 1 >= markers.length ? "disabled" : ""}>Next</button>
+                                <button className="btn btn-primary" onClick={next} disabled={((panningIndex + 1 >= markers.length) || selectedCoin === allKey.current) ? "disabled" : ""}>Next</button>
                             </div>
                         </div>
                         <div className="row mb-2 d-flex d-sm-none">
