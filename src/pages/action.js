@@ -51,7 +51,6 @@ function Action() {
 
                     // Attempt to automatically set the closest city to our
                     navigator.geolocation.getCurrentPosition((position) => {
-
                         let closest = {};
 
                         const countries = Object.keys(geoCities);
@@ -92,9 +91,6 @@ function Action() {
                                         }
                                     }
                                 }
-
-
-
                             }
                         }
 
@@ -118,7 +114,6 @@ function Action() {
                     });
                 } else {
                     /* geolocation IS NOT available */
-
                 }
             }
 
@@ -317,7 +312,8 @@ function Action() {
                     <div className="col-sm-2"></div>
                     <div className="col-sm-8 col-12">
                         <h1 className="display-1 header">Submit your good deed</h1>
-                        In the form below, enter <em>in what city</em> you did something good for others.<br /><br />
+                        In the form below, enter <em>in what city</em> you did something good for others.<br />
+                        (Allowing location services for this website will allow you to auto-fill the options below with your location. This is provided as a convenience and is not required to be enabled for you to submit the information below.)<br /><br />
 
                         <em>Note: Please see the <a href="#/faq">FAQ page</a> regarding how soon submissions will be updated on the map.</em>
                     </div>

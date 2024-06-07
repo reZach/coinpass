@@ -10,9 +10,9 @@
 
 /* https://mycolor.space/?hex=%23F7E7CE&sub=1 */
 :root {
-  --champagne: #f7e7ce;
-  --brown: #4e4637;
-  --darkbrown: #200505;
+  --champagne: #fdf9f0;
+  --blue: #4e3ccc;
+  --darkblue: #231871;
   --clay: #b5aa99;
   --seagreen: #b0d5ca;
   --darkgreen: #7b9e94;
@@ -51,23 +51,23 @@ body {
 }
 
 .nav-pills {
-  --bs-nav-pills-link-active-bg: var(--brown)
+  --bs-nav-pills-link-active-bg: var(--blue)
 }
 
 .nav-pills:hover {
-  --bs-nav-pills-link-active-bg: var(--darkbrown);
+  --bs-nav-pills-link-active-bg: var(--darkblue);
 }
 
 .btn-primary {
-  background-color: var(--brown) !important;
+  background-color: var(--blue) !important;
 }
 
 .btn-primary:hover {
-  background-color: var(--darkbrown) !important;
+  background-color: var(--darkblue) !important;
 }
 
 .form-check-input {
-  border: 2px solid var(--darkbrown) !important;
+  border: 2px solid var(--darkblue) !important;
 }
 
 code {

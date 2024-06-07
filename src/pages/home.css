@@ -26,7 +26,7 @@
     padding: 10px 20px;
     margin: 0 10px;
     font-size: 1.2rem;
-    background-color: var(--brown);
+    background-color: var(--blue);
     color: white;
     border: none;
     border-radius: 5px;
@@ -35,5 +35,5 @@
   }
   
   .cta-button:hover {
-    background-color: var(--darkbrown);
+    background-color: var(--darkblue);
   }
