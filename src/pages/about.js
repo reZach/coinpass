@@ -25,7 +25,7 @@ function About() {
 
                         <p>I hope to inspire your love for neighbor and the positive impact you can have in more lives than you realize.</p>
 
-                        <p><em>To the one who changed the course of my life, @SeaStar, thank you</em></p>
+                        <p><em>To the one who changed the course of my life, SeaStar, thank you</em></p>
                     </div>
                     <div className="col-sm-2"></div>
                 </div>
