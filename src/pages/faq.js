@@ -22,7 +22,7 @@ function Faq() {
                         <p>A limited run of coins were minted; there is no way to get a coin unless you receive it from someone else. I've toyed with the idea of minting more coins in the future if the idea gets popular.</p>
 
                         <h1 className="display-3 header">What are some good ideas how to love others<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
-                        <p>Call a friend or elderly relative who you know is lonely, make a meal for someone who recently had a new child or adopted, cut the grass for a neighbor, write a letter of gratitude or thanks, volunteer your time at a local cause, [tba]</p>
+                        <p>Call a friend or elderly relative who you know is lonely, make a meal for someone who recently had a new child or adopted, do yardwork for a neighbor, write a letter of gratitude or thanks, volunteer your time for a local cause, take the time and listen to someone, show verbal appreciation, send a care package, offer to babysit, do extra chores, help without being asked to, donate your expertise, teach the inexperienced, visit someone who is sick.</p>
 
                         <h1 className="display-3 header">Why coins and not something else<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
                         <p>I wanted to use something that was tangible and easily tradeable between people.</p>
