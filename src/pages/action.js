@@ -222,7 +222,7 @@ function Action() {
 
             Swal.fire({
                 title: "Good job!",
-                text: "Thanks for doing something good for another person!",
+                html: "Thanks for doing something good for another person!<br /><br /><em>You can view the <a href='#/faq'>FAQ page</a> to see how soon your action will be visible on the map</em>.",
                 icon: "success"
             });
         } else {

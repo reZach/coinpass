@@ -21,6 +21,9 @@ function Faq() {
                         <h1 className="display-3 header">Where can I get a coin<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
                         <p>A limited run of coins were minted; there is no way to get a coin unless you receive it from someone else. I've toyed with the idea of minting more coins in the future if the idea gets popular.</p>
 
+                        <h1 className="display-3 header">What are some good ideas how to love others<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
+                        <p>Call a friend or elderly relative who you know is lonely, make a meal for someone who recently had a new child or adopted, cut the grass for a neighbor, write a letter of gratitude or thanks, volunteer your time at a local cause, [tba]</p>
+
                         <h1 className="display-3 header">Why coins and not something else<span style={{ position: "relative", top: "-8px" }}>?</span></h1>
                         <p>I wanted to use something that was tangible and easily tradeable between people.</p>
 
@@ -29,6 +32,9 @@ function Faq() {
 
                         <h1 className="display-3 header">My city isn't listed as an option to choose</h1>
                         <p>If your city isn't listed on the <a href="/#action">action page</a>, you can submit your city details on <a href="/#addcity">this page</a> and we will work to get your city added in a few working days.</p>
+
+                        <h1 className="display-3 header">I can't read the captcha value</h1>
+                        <p>If the captcha value is hard to read, refresh the page and a new captcha value will be generated.</p>
 
                         <h1 className="display-3 header">I have a suggestion for the website</h1>
                         <p>

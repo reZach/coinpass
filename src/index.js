@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import Action from "./pages/action";
 import AddCity from "./pages/addcity";
 import Stats from "./pages/stats";
+import About from "./pages/about";
 import Faq from "./pages/faq";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
@@ -30,6 +31,10 @@ const router = createHashRouter([
   {
     path: "/stats",
     element: <Stats />
+  },
+  {
+    path: "/about",
+    element: <About />
   },
   {
     path: "/faq",

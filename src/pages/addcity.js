@@ -93,7 +93,7 @@ function AddCity() {
 
         Swal.fire({
             title: "Success",
-            text: "We'll review, and work to add your city within a few working days.",
+            text: "We'll review your submission, and work to add your city within a few working days.",
             icon: "success"
         });
         

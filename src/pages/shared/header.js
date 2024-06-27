@@ -24,6 +24,9 @@ function Header(props) {
                             <a href="/#stats" className={"nav-link bold " + (props.page === "stats" ? "active" : "")}>Stats</a>
                         </li>
                         <li className="nav-item">
+                            <a href="/#about" className={"nav-link bold " + (props.page === "about" ? "active" : "")}>About</a>
+                        </li>
+                        <li className="nav-item">
                             <a href="/#faq" className={"nav-link bold " + (props.page === "faq" ? "active" : "")}>FAQ</a>
                         </li>
                     </ul>
