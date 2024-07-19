@@ -24,8 +24,6 @@ function About() {
                         <p>I've placed the words: "As I have loved you, so you must love one another" (John 13:34) as a reminder on the coin to love others as Jesus loved us. Jesus obeyed the will of God out of love for us, and because of that, he gave his life for us. In Catholic teaching, we too are called to give our lives for others. No one wishes crucifixion or death on another, but in other ways we find we can give our lives to another. If you are married, you give your life to your spouse and to your family. If you are single, you give your life to those around you. If you are consecrated to religious life, you give your life to God and the Church. It's from this self-giving of ourselves that we truly find what life is meant for.</p>
 
                         <p>I hope to inspire your love for neighbor and the positive impact you can have in more lives than you realize.</p>
-
-                        <p><em>To the one who changed the course of my life, SeaStar, thank you</em></p>
                     </div>
                     <div className="col-sm-2"></div>
                 </div>
