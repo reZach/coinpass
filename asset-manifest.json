@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.73a4b7c7.css",
-    "main.js": "/static/js/main.c5d7ae49.js",
+    "main.js": "/static/js/main.8dfc7fb8.js",
     "static/js/952.0b6e1e8e.chunk.js": "/static/js/952.0b6e1e8e.chunk.js",
     "static/js/453.4a6e0443.chunk.js": "/static/js/453.4a6e0443.chunk.js",
     "static/media/coin.jpg": "/static/media/coin.b0256b4b51de2856fd70.jpg",
@@ -9,12 +9,12 @@
     "static/media/MedulaOne-Regular.ttf": "/static/media/MedulaOne-Regular.d798d79afd026279ed9d.ttf",
     "index.html": "/index.html",
     "main.73a4b7c7.css.map": "/static/css/main.73a4b7c7.css.map",
-    "main.c5d7ae49.js.map": "/static/js/main.c5d7ae49.js.map",
+    "main.8dfc7fb8.js.map": "/static/js/main.8dfc7fb8.js.map",
     "952.0b6e1e8e.chunk.js.map": "/static/js/952.0b6e1e8e.chunk.js.map",
     "453.4a6e0443.chunk.js.map": "/static/js/453.4a6e0443.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.73a4b7c7.css",
-    "static/js/main.c5d7ae49.js"
+    "static/js/main.8dfc7fb8.js"
   ]
 }
